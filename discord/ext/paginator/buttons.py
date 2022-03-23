@@ -8,7 +8,7 @@ from . import button, errors
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from paginator import Paginator
+    from .paginator import Paginator
 
 class FirstElement(button.BetterButton):
     def __init__(
