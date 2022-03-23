@@ -21,7 +21,7 @@ class FirstElement(button.BetterButton):
         super().__init__(
             style=ButtonStyle.blurple,
             emoji="\U000023ee",
-            label="First",
+            label="First Page",
             disabled=disabled
         )
         self.client = client
@@ -31,7 +31,7 @@ class FirstElement(button.BetterButton):
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
         if interaction.user != self.user:
-            raise errors.NotAuthor("You are not keine ahnung")
+            raise errors.NotAuthor("You are not allowed to do this")
 
         return True
 
@@ -59,7 +59,7 @@ class PreviousElement(button.BetterButton):
         super().__init__(
             style=ButtonStyle.blurple,
             emoji="\U000025c0",
-            label="Previous",
+            label="Previous Page",
             disabled=disabled
         )
         self.client = client
@@ -69,7 +69,7 @@ class PreviousElement(button.BetterButton):
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
         if interaction.user != self.user:
-            raise errors.NotAuthor("You are not keine ahnung")
+            raise errors.NotAuthor("You are not allowed to do this")
 
         return True
 
@@ -98,7 +98,7 @@ class NextElement(button.BetterButton):
         super().__init__(
             style=ButtonStyle.blurple,
             emoji="\U000027a1",
-            label="Next",
+            label="Next Page",
             disabled=disabled
         )
         self.client = client
@@ -108,7 +108,7 @@ class NextElement(button.BetterButton):
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
         if interaction.user != self.user:
-            raise errors.NotAuthor("You are not keine ahnung")
+            raise errors.NotAuthor("You are not allowed to do this")
 
         return True
 
@@ -137,7 +137,7 @@ class LastElement(button.BetterButton):
         super().__init__(
             style=ButtonStyle.blurple,
             emoji="\U000023ed",
-            label="Last",
+            label="Last Page",
             disabled=disabled
         )
         self.client = client
@@ -147,7 +147,7 @@ class LastElement(button.BetterButton):
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
         if interaction.user != self.user:
-            raise errors.NotAuthor("You are not keine ahnung")
+            raise errors.NotAuthor("You are not allowed to do this")
 
         return True
 
@@ -184,7 +184,7 @@ class Stop(button.BetterButton):
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
         if interaction.user != self.user:
-            raise errors.NotAuthor("You are not keine ahnung")
+            raise errors.NotAuthor("You are not allowed to do this")
 
         return True
 
@@ -223,7 +223,7 @@ class Start(button.BetterButton):
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
         if interaction.user != self.user:
-            raise errors.NotAuthor("You are not keine ahnung")
+            raise errors.NotAuthor("You are not allowed to do this")
 
         return True
 
