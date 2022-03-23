@@ -3,7 +3,7 @@ from __future__ import annotations
 from discord import ButtonStyle, User, Interaction
 from discord.ext.commands import Bot
 
-import button, errors
+from . import button, errors
 
 from typing import TYPE_CHECKING
 

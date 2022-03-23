@@ -4,7 +4,7 @@ from discord import ButtonStyle, Emoji, PartialEmoji, Interaction
 
 from typing import Any, Dict, Callable, List, Coroutine, Type, Optional, Union
 
-from errors import ButtonException, ButtonFailed
+from .errors import ButtonException, ButtonFailed
 
 EH = Callable[[Any, Interaction, ButtonException], Coroutine[Any, Any, Any]]
 CH = Callable[[Any, Interaction], Coroutine[Any, Any, bool]]
@@ -42,11 +42,9 @@ class ButtonMeta(type):
             for elem, value in base.__dict__.items():
                 if isinstance(value, ButtonErrorHandler):
                     error_handlers[value.exception_type] = value
-                    print(value.exception_type.__class__, value.callback)
 
                 if isinstance(value, ButtonCheck):
                     checks[value.priority] = value
-                    print(type(value.priority), value.callback)
 
         new_cls.__error_handlers__ = error_handlers
         new_cls.__checks__ = checks

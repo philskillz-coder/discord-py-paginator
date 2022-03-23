@@ -1,7 +1,7 @@
 from discord import ui, User
 from discord.ext.commands import Bot
 
-import buttons
+from . import buttons
 
 from typing import Dict, Any
 
