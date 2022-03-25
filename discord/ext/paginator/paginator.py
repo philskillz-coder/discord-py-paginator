@@ -1,7 +1,7 @@
 from discord import ui, User
 from discord.ext.commands import Bot
 
-from . import buttons
+from . import buttons, modals
 
 from typing import Dict, Any
 
@@ -10,7 +10,8 @@ class Paginator(ui.View):
             self,
             client: Bot,
             user: User,
-            timeout: int = 180
+            timeout: int = 180,
+            quick_nav: bool = True
     ):
         super().__init__(timeout=timeout)
         self.client = client
@@ -24,14 +25,12 @@ class Paginator(ui.View):
         self.start_btn = buttons.Start(client, self, user, False)
         self.stop_btn = buttons.Stop(client, self, user, False)
 
-        self.add_item(self.first_elem_btn)
-        self.add_item(self.prev_elem_btn)
-        self.add_item(self.start_btn)
-        self.add_item(self.next_elem_btn)
-        self.add_item(self.last_elem_btn)
+        self.quick_nav = modals.QuickNav(self, user)
 
-        for item in self.children:
-            item.parent = self
+        self.add_item(self.start_btn)
+
+    async def setup(self, *args, **kwargs):
+        pass
 
     async def start(self):
         self.clear_items()
@@ -43,9 +42,12 @@ class Paginator(ui.View):
 
         self.add_item(self.first_elem_btn)
         self.add_item(self.prev_elem_btn)
-        self.add_item(self.stop_btn)
+        self.add_item(self.quick_nav)
         self.add_item(self.next_elem_btn)
         self.add_item(self.last_elem_btn)
+
+        if self.quick_nav:
+            self.add_item(self.stop_btn)
 
     async def get_page_count(self) -> int:
         return 1

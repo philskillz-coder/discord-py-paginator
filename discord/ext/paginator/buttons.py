@@ -19,9 +19,8 @@ class FirstElement(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.blurple,
-            emoji="\U000023ee",
-            label="First Page",
+            style=ButtonStyle.secondary,
+            label="\U000023ee",
             disabled=disabled
         )
         self.client = client
@@ -58,8 +57,7 @@ class PreviousElement(button.BetterButton):
     ):
         super().__init__(
             style=ButtonStyle.blurple,
-            emoji="\U000025c0",
-            label="Previous Page",
+            label="\U000025c0",
             disabled=disabled
         )
         self.client = client
@@ -97,8 +95,7 @@ class NextElement(button.BetterButton):
     ):
         super().__init__(
             style=ButtonStyle.blurple,
-            emoji="\U000027a1",
-            label="Next Page",
+            label="\U000027a1",
             disabled=disabled
         )
         self.client = client
@@ -135,9 +132,8 @@ class LastElement(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.blurple,
-            emoji="\U000023ed",
-            label="Last Page",
+            style=ButtonStyle.secondary,
+            label="\U000023ed",
             disabled=disabled
         )
         self.client = client
@@ -172,9 +168,8 @@ class Stop(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.blurple,
-            emoji="\U0001f7e5",
-            label="Stop",
+            style=ButtonStyle.danger,
+            label="Quit",
             disabled=disabled
         )
         self.client = client
@@ -211,8 +206,7 @@ class Start(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.blurple,
-            emoji="\U0001f7e9",
+            style=ButtonStyle.success,
             label="Start",
             disabled=disabled
         )
