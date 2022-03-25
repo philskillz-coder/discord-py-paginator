@@ -1,17 +1,25 @@
-from discord import ui, User
+from discord import ui, User, Interaction
 from discord.ext.commands import Bot
 
 from . import buttons, modals
 
 from typing import Dict, Any
 
-class Paginator(ui.View):
-    def __init__(
-            self,
-            client: Bot,
-            user: User,
-            timeout: int = 180,
-            quick_nav: bool = True
+class AsyncMeta(type):
+    async def __call__(self, *args, **kwargs):
+        obb = object.__new__(self)
+        await obb.__init__(*args, **kwargs)
+        return obb
+
+class Paginator(ui.View, metaclass=AsyncMeta):
+    async def __init__(
+        self,
+        client: Bot,
+        user: User,
+        interaction: Interaction,
+        timeout: int = 180,
+        quick_nav: bool = True,
+        *args, **kwargs
     ):
         super().__init__(timeout=timeout)
         self.client = client
@@ -29,10 +37,14 @@ class Paginator(ui.View):
 
         self.add_item(self.start_btn)
 
+        await self.setup(*args, **kwargs)
+        await self.wait()
+        await interaction.delete_original_message()
+
     async def setup(self, *args, **kwargs):
         pass
 
-    async def start(self):
+    async def started_pressed(self):
         self.clear_items()
 
         self.first_elem_btn.disabled = False

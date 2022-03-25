@@ -228,7 +228,7 @@ class Start(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.start()
+        await self.parent.started_pressed()
         await self.parent.set_page(1)
         values = await self.parent.get_page_content()
         values.update({"view": self.parent})
