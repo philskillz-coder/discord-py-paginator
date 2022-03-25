@@ -5,13 +5,24 @@ from . import buttons, modals
 
 from typing import Dict, Any
 
-class AsyncMeta(type):
-    async def __call__(self, *args, **kwargs):
-        obb = object.__new__(self)
-        await obb.__init__(*args, **kwargs)
-        return obb
+def asyncinit(cls):
+    __new__ = cls.__new__
 
-class Paginator(ui.View, metaclass=AsyncMeta):
+    async def init(obj, *arg, **kwarg):
+        await obj.__init__(*arg, **kwarg)
+        return obj
+
+    def new(cls, *arg, **kwarg):
+        obj = __new__(cls, *arg, **kwarg)
+        coro = init(obj, *arg, **kwarg)
+        #coro.__init__ = lambda *_1, **_2: None
+        return coro
+
+    cls.__new__ = new
+    return cls
+
+@asyncinit
+class Paginator(ui.View):
     async def __init__(
         self,
         client: Bot,
