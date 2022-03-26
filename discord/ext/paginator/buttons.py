@@ -246,8 +246,8 @@ class QuickNav(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.secondary,
-            label="Quick Nav",
+            style=ButtonStyle.blurple,
+            label="Nav",
             disabled=disabled
         )
         self.client = client
@@ -269,3 +269,13 @@ class QuickNav(button.BetterButton):
 
     async def on_click(self, interaction: Interaction):
         await interaction.response.send_modal(modals.QuickNav(parent=self.parent, user=self.user))
+
+class Placeholder(button.BetterButton):
+    def __init__(
+            self
+    ):
+        super().__init__(
+            style=ButtonStyle.secondary,
+            label="\U0001f6ab",
+            disabled=True
+        )
