@@ -32,7 +32,7 @@ class QuickNav(ui.Modal, title='Quick Navigation'):
 
     async def on_submit(self, interaction: Interaction):
         if not str(self.page).isdigit():
-            await interaction.response.send_message("This is not a number!")
+            await interaction.response.send_message(f"`{self.page}` is not a number!")
             raise ValueError("lazy") # add better error message
 
         await self.parent.set_page(int(str(self.page)))
