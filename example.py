@@ -6,7 +6,7 @@ class GuildPaginator(paginator.Paginator):
     async def get_page_count(self) -> int:
         return len(self.client.guilds)
 
-    async def get_content(self, page: int) -> Dict[str, Any]:
+    async def get_page_content(self, interaction: Interaction, page: int) -> Dict[str, Any]:
         # this method should return the arguments used for interaction.response.edit_message
         # e.g. {'content': 'hello'} means the message content will be edited to hello
 

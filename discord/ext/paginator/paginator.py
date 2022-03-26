@@ -1,4 +1,4 @@
-from discord import ui, User, Interaction
+from discord import ui, User, Interaction, Webhook
 from discord.ext.commands import Bot
 
 from . import buttons
@@ -92,8 +92,18 @@ class Paginator(ui.View):
 
         self.page = page
 
-    async def get_page_content(self) -> Dict[str, Any]:
-        return await self.get_content(self.page)
+    async def update_contents(self, interaction: Interaction):
+        await interaction.response.defer()
+        contents = await self.get_page_content(interaction, self.page)
+        ws: Webhook = interaction.followup
 
-    async def get_content(self, page: int) -> Dict[str, Any]:
+        await ws.edit_message(
+            (await interaction.original_message()).id,
+            **await self.get_page_content(interaction, self.page)
+        )
+
+    async def get_page_content(self, interaction: Interaction, page: int) -> Dict[str, Any]:
         return {"content": f"**Page {page}/{await self.get_page_content()}**"}
+
+
+

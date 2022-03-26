@@ -36,6 +36,4 @@ class QuickNav(ui.Modal, title='Quick Navigation'):
             raise ValueError("lazy") # add better error message
 
         await self.parent.set_page(int(str(self.page)))
-        await interaction.response.edit_message(
-            **await self.parent.get_page_content()
-        )
+        await self.parent.update_contents(interaction)

@@ -42,9 +42,7 @@ class FirstElement(button.BetterButton):
 
     async def on_click(self, interaction: Interaction):
         await self.parent.set_page(1)
-        await interaction.response.edit_message(
-            **await self.parent.get_page_content()
-        )
+        await self.parent.update_contents(interaction)
 
 
 class PreviousElement(button.BetterButton):
@@ -79,9 +77,7 @@ class PreviousElement(button.BetterButton):
 
     async def on_click(self, interaction: Interaction):
         await self.parent.set_page(self.parent.page-1)
-        await interaction.response.edit_message(
-            **await self.parent.get_page_content()
-        )
+        await self.parent.update_contents(interaction)
 
 
 
@@ -117,9 +113,7 @@ class NextElement(button.BetterButton):
 
     async def on_click(self, interaction: Interaction):
         await self.parent.set_page(self.parent.page + 1)
-        await interaction.response.edit_message(
-            **await self.parent.get_page_content()
-        )
+        await self.parent.update_contents(interaction)
 
 
 
@@ -155,9 +149,7 @@ class LastElement(button.BetterButton):
 
     async def on_click(self, interaction: Interaction):
         await self.parent.set_page(await self.parent.get_page_count())
-        await interaction.response.edit_message(
-            **await self.parent.get_page_content()
-        )
+        await self.parent.update_contents(interaction)
 
 class Stop(button.BetterButton):
     def __init__(
@@ -230,10 +222,13 @@ class Start(button.BetterButton):
     async def on_click(self, interaction: Interaction):
         await self.parent.started_pressed()
         await self.parent.set_page(1)
-        values = await self.parent.get_page_content()
+        await interaction.response.defer()
+        values = await self.parent.get_page_content(interaction, self.parent.page)
         values.update({"view": self.parent})
 
-        await interaction.response.edit_message(
+        ws = interaction.followup
+        await ws.edit_message(
+            (await interaction.original_message()).id,
             **values
         )
 
