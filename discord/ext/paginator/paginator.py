@@ -82,7 +82,7 @@ class Paginator(ui.View):
         return self
 
     async def start(self, interaction: Interaction):
-        await self._start(interaction)
+        await self._start()
         await self.on_start(interaction)
 
     async def stop(self, interaction: Interaction):
