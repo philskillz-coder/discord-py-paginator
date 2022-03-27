@@ -35,5 +35,5 @@ class QuickNav(ui.Modal, title='Quick Navigation'):
             await interaction.response.send_message(f"`{self.page}` is not a number!")
             raise ValueError("lazy") # add better error message
 
-        await self.parent.set_page(int(str(self.page)))
+        await self.parent.set_page(interaction, int(str(self.page)))
         await self.parent.update_contents(interaction)
