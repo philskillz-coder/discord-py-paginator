@@ -1,9 +1,9 @@
-from discord import ui, User, Interaction, Webhook
+from discord import ui, User, Interaction, Webhook, Embed, File
 from discord.ext.commands import Bot
 
 from . import buttons
 
-from typing import Dict, Any
+from typing import Dict, Any, List, Union, Optional
 
 
 class Paginator(ui.View):
@@ -30,6 +30,34 @@ class Paginator(ui.View):
 
         self.quick_nav_btn = buttons.QuickNav(client, self, user, not quick_nav)
         self.placeholder_btn = buttons.Placeholder
+
+        self.static_data: Optional[List[Dict[str, Union[str, Embed, List[File]]]]] = kwargs.get("static_data", None)
+
+        if self.static_data is not None:
+            self.static_data_pages = len(
+                self.static_data)  # static data cannot change, so get_page_count does not have to return len every time
+
+        else:
+            self.static_data_pages = None
+
+    @classmethod
+    def from_list(
+            cls,
+            client: Bot,
+            user: User,
+            timeout: int = 180,
+            quick_nav: bool = True,
+            data: List[Dict[str, Union[str, Embed, List[File]]]] = None
+    ):
+        print(data)
+
+        return cls(
+            client=client,
+            user=user,
+            timeout=timeout,
+            quick_nav=quick_nav,
+            static_data=data
+        )
 
     async def setup(self, *args, **kwargs):
         pass
@@ -78,12 +106,18 @@ class Paginator(ui.View):
         self.add_item(self.stop_btn)
         self.add_item(self.placeholder_btn())
         self.add_item(self.placeholder_btn())
+        
+    async def _get_page_count(self, interaction: Interaction) -> int:
+        if self.static_data_pages is not None:
+            return self.static_data_pages
+        
+        return await self.get_page_count(interaction)
+    
+    async def get_page_count(self, interaction: Interaction) -> int:
+        raise NotImplementedError("get_page_count must be implemented!")
 
-    async def get_page_count(self) -> int:
-        return 1
-
-    async def set_page(self, page: int):
-        count = await self.get_page_count()
+    async def set_page(self, interaction: Interaction, page: int):
+        count = await self._get_page_count(interaction)
         if page < 1:
             page = count
 
@@ -92,18 +126,27 @@ class Paginator(ui.View):
 
         self.page = page
 
+    async def _get_update_contents(self, interaction: Interaction):
+        if self.static_data is None:
+            contents = await self.get_page_content(interaction, self.page)
+        
+        else:
+            contents = self.static_data[self.page-1]
+
+        return contents
+
+    async def get_page_content(self, interaction: Interaction, page: int) -> Dict[str, Any]:
+        raise NotImplementedError("get_page_content must be implemented!")
+
     async def update_contents(self, interaction: Interaction):
         await interaction.response.defer()
-        contents = await self.get_page_content(interaction, self.page)
+        contents = await self._get_update_contents(interaction)
         ws: Webhook = interaction.followup
 
         await ws.edit_message(
             (await interaction.original_message()).id,
-            **await self.get_page_content(interaction, self.page)
+            **contents
         )
-
-    async def get_page_content(self, interaction: Interaction, page: int) -> Dict[str, Any]:
-        return {"content": f"**Page {page}/{await self.get_page_content()}**"}
 
 
 

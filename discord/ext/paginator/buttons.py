@@ -223,7 +223,7 @@ class Start(button.BetterButton):
         await self.parent.started_pressed()
         await self.parent.set_page(1)
         await interaction.response.defer()
-        values = await self.parent.get_page_content(interaction, self.parent.page)
+        values = await self.parent._get_update_contents(interaction)
         values.update({"view": self.parent})
 
         ws = interaction.followup
