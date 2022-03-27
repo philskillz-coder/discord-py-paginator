@@ -144,7 +144,7 @@ class LastElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.set_page(interaction, await self.parent.get_page_count(interaction))
+        await self.parent.set_page(interaction, await self.parent._get_page_count(interaction))
         await self.parent.update_contents(interaction)
 
 
