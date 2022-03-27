@@ -14,7 +14,7 @@ class GuildPaginator(paginator.Paginator):
         # this cannot throw a index error because page is between 0 and the guild count
 
         return {
-            "content": f"Guild {page}/{await self.get_page_count()}",
+            "content": f"Guild {page}/{await self.get_page_count(interaction)}",
             "embed": (
                 Embed(
                     title="Guild",

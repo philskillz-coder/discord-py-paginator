@@ -144,7 +144,7 @@ class LastElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.set_page(interaction, await self.parent.get_page_count())
+        await self.parent.set_page(interaction, await self.parent.get_page_count(interaction))
         await self.parent.update_contents(interaction)
 
 
@@ -217,7 +217,6 @@ class Start(button.BetterButton):
 
     async def on_click(self, interaction: Interaction):
         await self.parent.start(interaction)
-        await self.parent.set_page(interaction, 1)
         await interaction.response.defer()
         values = await self.parent._get_update_contents(interaction)
         values.update({"view": self.parent})
