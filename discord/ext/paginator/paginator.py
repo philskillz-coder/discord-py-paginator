@@ -49,8 +49,6 @@ class Paginator(ui.View):
             quick_nav: bool = True,
             data: List[Dict[str, Union[str, Embed, List[File]]]] = None
     ):
-        print(data)
-
         return cls(
             client=client,
             user=user,
@@ -77,13 +75,21 @@ class Paginator(ui.View):
         self.add_item(self.placeholder_btn())
         self.add_item(self.placeholder_btn())
 
-    async def start(self, *args, **kwargs):
+    async def run(self, *args, **kwargs):
         await self.add_buttons()
         await self.setup(*args, **kwargs)
 
         return self
 
-    async def started_pressed(self):
+    async def start(self, interaction: Interaction):
+        await self._start(interaction)
+        await self.on_start(interaction)
+
+    async def stop(self, interaction: Interaction):
+        await self.on_stop(interaction)
+        super().stop()
+
+    async def _start(self):
         self.clear_items()
 
         self.first_elem_btn.disabled = False
@@ -106,7 +112,14 @@ class Paginator(ui.View):
         self.add_item(self.stop_btn)
         self.add_item(self.placeholder_btn())
         self.add_item(self.placeholder_btn())
-        
+
+    async def on_start(self, interaction: Interaction):
+        pass
+
+    async def on_stop(self, interaction: Interaction):
+        pass
+
+
     async def _get_page_count(self, interaction: Interaction) -> int:
         if self.static_data_pages is not None:
             return self.static_data_pages

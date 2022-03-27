@@ -33,5 +33,5 @@ class GuildPaginator(paginator.Paginator):
 async def show_guilds(interaction: Interaction):
     await interaction.response.send_message(
         content="The bot guilds",
-        view=await GuildPaginator(interaction.client, interaction.user).start()
+        view=await GuildPaginator(interaction.client, interaction.user).run()
     )

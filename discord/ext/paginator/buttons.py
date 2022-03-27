@@ -41,9 +41,8 @@ class FirstElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.set_page(1)
+        await self.parent.set_page(interaction, 1)
         await self.parent.update_contents(interaction)
-
 
 class PreviousElement(button.BetterButton):
     def __init__(
@@ -76,9 +75,8 @@ class PreviousElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.set_page(self.parent.page-1)
+        await self.parent.set_page(interaction, self.parent.page-1)
         await self.parent.update_contents(interaction)
-
 
 
 class NextElement(button.BetterButton):
@@ -112,10 +110,8 @@ class NextElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.set_page(self.parent.page + 1)
+        await self.parent.set_page(interaction, self.parent.page + 1)
         await self.parent.update_contents(interaction)
-
-
 
 class LastElement(button.BetterButton):
     def __init__(
@@ -148,8 +144,9 @@ class LastElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.set_page(await self.parent.get_page_count())
+        await self.parent.set_page(interaction, await self.parent.get_page_count())
         await self.parent.update_contents(interaction)
+
 
 class Stop(button.BetterButton):
     def __init__(
@@ -182,12 +179,11 @@ class Stop(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        self.parent.stop()
+        await self.parent.stop(interaction)
         await interaction.response.send_message(
             content="Stopped",
             ephemeral=True
         )
-
 
 class Start(button.BetterButton):
     def __init__(
@@ -220,8 +216,8 @@ class Start(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.started_pressed()
-        await self.parent.set_page(1)
+        await self.parent.start(interaction)
+        await self.parent.set_page(interaction, 1)
         await interaction.response.defer()
         values = await self.parent._get_update_contents(interaction)
         values.update({"view": self.parent})
@@ -231,6 +227,7 @@ class Start(button.BetterButton):
             (await interaction.original_message()).id,
             **values
         )
+
 
 class QuickNav(button.BetterButton):
     def __init__(
