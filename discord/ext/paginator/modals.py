@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-from discord import ButtonStyle, User, Interaction, ui
-from discord.ext.commands import Bot
-from discord.utils import MISSING
-
-from . import button, errors
-
 from typing import TYPE_CHECKING, Optional
+
+from discord import User, Interaction, ui
+from discord.utils import MISSING
 
 if TYPE_CHECKING:
     from .paginator import Paginator
@@ -26,14 +23,14 @@ class QuickNav(ui.Modal, title='Quick Navigation'):
                 content="You are not allowed to do this",
                 ephemeral=True
             )
-            raise ValueError("lazy") # add better error message
+            raise ValueError("You are not allowed to do this!")  # add better error message
 
         return True
 
     async def on_submit(self, interaction: Interaction):
         if not str(self.page).isdigit():
             await interaction.response.send_message(f"`{self.page}` is not a number!")
-            raise ValueError("lazy") # add better error message
+            raise ValueError("Not a number")  # add better error message
 
-        await self.parent.set_page(interaction, int(str(self.page)))
-        await self.parent.update_contents(interaction)
+        await self.parent.update_page_number(interaction, int(str(self.page)))
+        await self.parent.update_page_content(interaction)

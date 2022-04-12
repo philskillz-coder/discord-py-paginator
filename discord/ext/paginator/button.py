@@ -1,21 +1,22 @@
 from __future__ import annotations
-from discord.ui import Button
-from discord import ButtonStyle, Emoji, PartialEmoji, Interaction
 
 from typing import Any, Dict, Callable, List, Coroutine, Type, Optional, Union
 
-from .errors import ButtonException, ButtonFailed
+from discord import ButtonStyle, Emoji, PartialEmoji, Interaction
+from discord.ui import Button
 
-EH = Callable[[Any, Interaction, ButtonException], Coroutine[Any, Any, Any]]
+from . import errors
+
+EH = Callable[[Any, Interaction, errors.ButtonException], Coroutine[Any, Any, Any]]
 CH = Callable[[Any, Interaction], Coroutine[Any, Any, bool]]
 
 
 class ButtonErrorHandler:
-    def __init__(self, callback: EH, exception_type: Type[ButtonException]):
+    def __init__(self, callback: EH, exception_type: Type[errors.ButtonException]):
         self.callback = callback
-        self.exception_type: Type[ButtonException] = exception_type
+        self.exception_type: Type[errors.ButtonException] = exception_type
 
-    async def invoke(self, instance, interaction: Interaction, error: ButtonException):
+    async def invoke(self, instance, interaction: Interaction, error: errors.ButtonException):
         return await self.callback(instance, interaction, error)
 
 
@@ -29,7 +30,7 @@ class ButtonCheck:
 
 
 class ButtonMeta(type):
-    __error_handlers__: Dict[Type[ButtonException], ButtonErrorHandler] = {}
+    __error_handlers__: Dict[Type[errors.ButtonException], ButtonErrorHandler] = {}
     __checks__: Dict[int, ButtonCheck] = {}
 
     def __new__(mcs, *args: Any, **kwargs: Any):
@@ -55,7 +56,7 @@ class ButtonMeta(type):
         super().__init__(*args)
 
 
-def button_on_error(exception_type: Type[ButtonException]):
+def button_on_error(exception_type: Type[errors.ButtonException]):
     def deco(method: EH) -> ButtonErrorHandler:
         return ButtonErrorHandler(method, exception_type)
 
@@ -90,7 +91,7 @@ class BetterButton(Button, metaclass=ButtonMeta):
             row=row
         )
 
-    async def on_error(self, interaction: Interaction, error: ButtonException):
+    async def on_error(self, interaction: Interaction, error: errors.ButtonException):
         raise error
 
     async def interaction_check(self, interaction: Interaction) -> bool:
@@ -103,7 +104,7 @@ class BetterButton(Button, metaclass=ButtonMeta):
         try:
             value = await self.interaction_check(interaction)
             if value is not True:
-                raise ButtonFailed(f"Interaction check {self.interaction_check.__name__!r} with priority 0 failed!")
+                raise errors.ButtonFailed(f"Interaction check {self.interaction_check.__name__!r} with priority 0 failed!")
 
             _checks: List[ButtonCheck] = sorted(self.__checks__.values(), key=lambda c: c.priority)
 
@@ -111,9 +112,9 @@ class BetterButton(Button, metaclass=ButtonMeta):
                 value = await check.invoke(self, interaction)
 
                 if value is not True:
-                    raise ButtonFailed("Button check failed!")
+                    raise errors.ButtonFailed("Button check failed!")
 
-        except ButtonException as button_exception:
+        except errors.ButtonException as button_exception:
             for exception_type, callback in self.__error_handlers__.items():
                 if isinstance(button_exception, exception_type):
                     await callback.invoke(self, interaction, button_exception)

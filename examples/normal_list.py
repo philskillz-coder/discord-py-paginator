@@ -1,8 +1,10 @@
+from abc import ABC
+
 from discord import app_commands, Embed, Color, Interaction
 from discord.ext.paginator import paginator
-from typing import Dict, Any
 
-class ColorPaginator(paginator.Paginator):
+
+class ColorPaginator(paginator.Paginator, ABC):
     pass
     
 @app_commands.command(
