@@ -33,15 +33,8 @@ class Paginator(ui.View):
 
         self.quick_nav_btn = view_buttons.QuickNav(client, self, user, not quick_nav)
 
-        self.static_data: Optional[List[Dict[str, Union[str, Embed, List[File]]]]] = kwargs.get("static_data", None)
-
-        if self.static_data is not None:
-            self.static_data_pages = len(
-                self.static_data
-            )  # static data cannot change, so get_page_count does not have to return len every time
-
-        else:
-            self.static_data_pages = None
+        self.static_data: Optional[List[Dict[str, Any]]] = kwargs.get("static_data")
+        self.static_data_pages = len(self.static_data or []) or None
 
     @classmethod
     def from_list(
@@ -50,7 +43,7 @@ class Paginator(ui.View):
             user: User,
             timeout: int = 180,
             quick_nav: bool = True,
-            data: List[Dict[str, Union[str, Embed, List[File]]]] = None
+            data: List[Dict[str, Any]] = None
     ):
         return cls(
             client=client,
@@ -132,7 +125,7 @@ class Paginator(ui.View):
         raise NotImplementedError("get_page_count must be implemented!")
 
     async def update_page_number(self, interaction: Interaction, page: int):
-        count = await self.acquire_page_count(interaction) + 1
+        count = await self.acquire_page_count(interaction)
 
         self.page = (page % count)
 
