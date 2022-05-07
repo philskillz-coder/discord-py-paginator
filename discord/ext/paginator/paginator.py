@@ -27,7 +27,7 @@ class Paginator(ui.View):
         if config is None:
             return Paginator.CONFIG
 
-        _config = Paginator.__CONFIG__.copy()
+        _config = Paginator.CONFIG.copy()
         _config.update(config)
         return _config
 

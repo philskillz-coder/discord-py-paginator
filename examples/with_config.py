@@ -3,6 +3,9 @@ from discord.ext.paginator import paginator
 from typing import Dict, Any
 
 class GuildPaginator(paginator.Paginator):
+    CONFIG = {
+        "use_quick_nav": False  # this paginator never uses quick nav by default
+    }
 
     async def get_page_count(self, interaction: Interaction) -> int:
         return len(self.client.guilds)
@@ -28,15 +31,33 @@ class GuildPaginator(paginator.Paginator):
             "ephemeral": True
         }
 
+
 @app_commands.command(
-    name="guilds",
+    name="guilds_0",
     description="Show all the guilds"
 )
-async def show_guilds(interaction: Interaction):
+async def guild_default_config(interaction: Interaction):
     await interaction.response.send_message(
         content="The bot guilds",
         view=await GuildPaginator(
             interaction.client,
             interaction.user
-        ).run()
+        ).run()  # in this case the config does not get overwritten so quick nav is not used
+    )
+
+
+@app_commands.command(
+    name="guilds_1",
+    description="Show all the guilds"
+)
+async def guild_overwrite_config(interaction: Interaction):
+    await interaction.response.send_message(
+        content="The bot guilds",
+        view=await GuildPaginator(
+            interaction.client,
+            interaction.user,
+            config={
+                "use_quick_nav": True
+            }
+        ).run()  # this instance of the GuildPaginator uses quick nav
     )
