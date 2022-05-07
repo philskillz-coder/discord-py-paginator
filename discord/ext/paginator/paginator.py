@@ -10,28 +10,54 @@ GCP_TYPE = Callable[[Interaction, int], Coroutine[Any, Any, Dict[str, Any]]]
 
 
 class Paginator(ui.View):
+    __CONFIG__: Dict = {                # DO NOT CHANGE THIS! You can add custom config attrs in Paginator.CONFIG
+        "view_timeout": 180,            # paginator view timeout
+
+        "use_quick_nav": True,          # paginator quick nav enabled?
+        "use_first_elem_button": True,
+        "use_prev_elem_button": True,
+        "use_next_elem_button": True,
+        "use_last_elem_button": True,
+        "use_placeholders": True
+    }
+    CONFIG = __CONFIG__.copy()          # will count for all instances of your paginator
+
+    @staticmethod
+    def parse_config(config: Dict) -> Dict:
+        if config is None:
+            return Paginator.CONFIG
+
+        _config = Paginator.__CONFIG__.copy()
+        _config.update(config)
+        return _config
+
+    def gcv(self, config_key: str, config_default_value: Optional[Any] = None, /):
+        return self.config.get(config_key, config_default_value)
+
+
     def __init__(
             self,
             client: Union[Bot, Client],
             user: User,
-            timeout: int = 180,
-            quick_nav: bool = True,
+            config: Optional[Dict] = None,
             *args, **kwargs
     ):
-        super().__init__(timeout=timeout)
+        super().__init__(timeout=self.gcv("view_timeout", 180))
+        self.config = self.parse_config(config)
+
         self.client = client
         self.user = user
         self.page = 0
 
-        self.first_elem_btn = view_buttons.FirstElement(client, self, user)
-        self.prev_elem_btn = view_buttons.PreviousElement(client, self, user)
-        self.next_elem_btn = view_buttons.NextElement(client, self, user)
-        self.last_elem_btn = view_buttons.LastElement(client, self, user)
+        self.first_elem_btn = view_buttons.FirstElement(client, self, user, self.gcv("use_first_elem_button", True))
+        self.prev_elem_btn = view_buttons.PreviousElement(client, self, user, self.gcv("use_prev_elem_button", True))
+        self.next_elem_btn = view_buttons.NextElement(client, self, user, self.gcv("use_next_elem_button", True))
+        self.last_elem_btn = view_buttons.LastElement(client, self, user, self.gcv("use_last_elem_button", True))
 
-        self.start_btn = view_buttons.Start(client, self, user)
-        self.stop_btn = view_buttons.Stop(client, self, user)
+        self.start_btn = view_buttons.Start(client, self, user, True)
+        self.stop_btn = view_buttons.Stop(client, self, user, True)
 
-        self.quick_nav_btn = view_buttons.QuickNav(client, self, user, not quick_nav)
+        self.quick_nav_btn = view_buttons.QuickNav(client, self, user, not self.gcv("use_quick_nav", True))
 
         self.static_data: Optional[List[Dict[str, Any]]] = kwargs.get("static_data")
         self.static_data_pages = len(self.static_data or []) or None
@@ -41,15 +67,13 @@ class Paginator(ui.View):
             cls,
             client: Union[Bot, Client],
             user: User,
-            timeout: int = 180,
-            quick_nav: bool = True,
+            config: Optional[Dict] = None,
             data: List[Dict[str, Any]] = None
     ):
         return cls(
             client=client,
             user=user,
-            timeout=timeout,
-            quick_nav=quick_nav,
+            config=config,
             static_data=data
         )
 
@@ -65,11 +89,13 @@ class Paginator(ui.View):
         self.add_item(self.start_btn)
         self.add_item(self.next_elem_btn)
         self.add_item(self.last_elem_btn)
-        self.add_item(view_buttons.Placeholder())
-        self.add_item(view_buttons.Placeholder())
+        if self.gcv("use_placeholders", True):
+            self.add_item(view_buttons.Placeholder())
+            self.add_item(view_buttons.Placeholder())
         self.add_item(self.stop_btn)
-        self.add_item(view_buttons.Placeholder())
-        self.add_item(view_buttons.Placeholder())
+        if self.gcv("use_placeholders", True):
+            self.add_item(view_buttons.Placeholder())
+            self.add_item(view_buttons.Placeholder())
 
     async def run(self, *args, **kwargs):
         await self.add_buttons()
@@ -84,26 +110,35 @@ class Paginator(ui.View):
     async def _paginator_start(self):
         self.clear_items()
 
-        self.first_elem_btn.disabled = False
-        self.next_elem_btn.disabled = False
-        self.prev_elem_btn.disabled = False
-        self.last_elem_btn.disabled = False
-        self.first_elem_btn.disabled = False
-        self.first_elem_btn.disabled = False
+        if self.gcv("use_first_elem_button", True):
+            self.first_elem_btn.disabled = False
+
+        if self.gcv("use_next_elem_button", True):
+            self.next_elem_btn.disabled = False
+
+        if self.gcv("use_prev_elem_button", True):
+            self.prev_elem_btn.disabled = False
+
+        if self.gcv("use_last_elem_button", True):
+            self.last_elem_btn.disabled = False
 
         self.start_btn.disabled = True
-        self.quick_nav_btn.disabled = False
+
+        if self.gcv("use_quick_nav", True):
+            self.quick_nav_btn.disabled = False
 
         self.add_item(self.first_elem_btn)
         self.add_item(self.prev_elem_btn)
         self.add_item(self.quick_nav_btn)
         self.add_item(self.next_elem_btn)
         self.add_item(self.last_elem_btn)
-        self.add_item(view_buttons.Placeholder())
-        self.add_item(view_buttons.Placeholder())
+        if self.gcv("use_placeholders", True):
+            self.add_item(view_buttons.Placeholder())
+            self.add_item(view_buttons.Placeholder())
         self.add_item(self.stop_btn)
-        self.add_item(view_buttons.Placeholder())
-        self.add_item(view_buttons.Placeholder())
+        if self.gcv("use_placeholders", True):
+            self.add_item(view_buttons.Placeholder())
+            self.add_item(view_buttons.Placeholder())
 
     async def paginator_stop(self, interaction: Interaction):
         await self.on_stop(interaction)

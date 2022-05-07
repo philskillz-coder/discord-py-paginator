@@ -3,6 +3,7 @@ from discord.ext.paginator import paginator
 from typing import Dict, Any
 
 class GuildPaginator(paginator.Paginator):
+
     async def get_page_count(self, interaction: Interaction) -> int:
         return len(self.client.guilds)
 
@@ -25,7 +26,7 @@ class GuildPaginator(paginator.Paginator):
                 .add_field(name="Member count", value=str(guild.member_count), inline=False)
             )
         }
-    
+
 @app_commands.command(
     name="guilds",
     description="Show all the guilds"

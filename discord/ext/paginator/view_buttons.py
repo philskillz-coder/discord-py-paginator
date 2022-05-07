@@ -18,6 +18,7 @@ class FirstElement(button.BetterButton):
             client: Bot,
             parent: Paginator,
             user: User,
+            using: bool,
             disabled: bool = True
     ):
         super().__init__(
@@ -27,6 +28,7 @@ class FirstElement(button.BetterButton):
         self.client = client
         self.parent = parent
         self.user = user
+        self.using = using
 
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
@@ -51,6 +53,7 @@ class PreviousElement(button.BetterButton):
             client: Bot,
             parent: Paginator,
             user: User,
+            using: bool,
             disabled: bool = True
     ):
         super().__init__(
@@ -61,6 +64,7 @@ class PreviousElement(button.BetterButton):
         self.client = client
         self.parent = parent
         self.user = user
+        self.using = using
 
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
@@ -86,6 +90,7 @@ class NextElement(button.BetterButton):
             client: Bot,
             parent: Paginator,
             user: User,
+            using: bool,
             disabled: bool = True
     ):
         super().__init__(
@@ -96,6 +101,7 @@ class NextElement(button.BetterButton):
         self.client = client
         self.parent = parent
         self.user = user
+        self.using = using
 
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
@@ -120,6 +126,7 @@ class LastElement(button.BetterButton):
             client: Bot,
             parent: Paginator,
             user: User,
+            using: bool,
             disabled: bool = True
     ):
         super().__init__(
@@ -129,6 +136,7 @@ class LastElement(button.BetterButton):
         self.client = client
         self.parent = parent
         self.user = user
+        self.using = using
 
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
@@ -154,6 +162,7 @@ class Stop(button.BetterButton):
             client: Bot,
             parent: Paginator,
             user: User,
+            using: bool,
             disabled: bool = True
     ):
         super().__init__(
@@ -164,6 +173,7 @@ class Stop(button.BetterButton):
         self.client = client
         self.parent = parent
         self.user = user
+        self.using = using
 
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
@@ -191,6 +201,7 @@ class Start(button.BetterButton):
             client: Bot,
             parent: Paginator,
             user: User,
+            using: bool,
             disabled: bool = True
     ):
         super().__init__(
@@ -201,6 +212,7 @@ class Start(button.BetterButton):
         self.client = client
         self.parent = parent
         self.user = user
+        self.using = using
 
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
@@ -235,6 +247,7 @@ class QuickNav(button.BetterButton):
             client: Bot,
             parent: Paginator,
             user: User,
+            using: bool,
             disabled: bool = True
     ):
         super().__init__(
@@ -245,6 +258,7 @@ class QuickNav(button.BetterButton):
         self.client = client
         self.parent = parent
         self.user = user
+        self.using = using
 
     @button.button_check(1)
     async def check_author(self, interaction: Interaction) -> bool:
