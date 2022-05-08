@@ -72,7 +72,7 @@ You can configurate your paginator subclass and instance via a config dict.
 All config options can be found [here](https://github.com/philskillz-coder/discord-py-paginator/blob/main/discord/ext/paginator/paginator.py#L13).
 
 ### An example with config
-By default this paginator will have ephemeral disabled, the instance though has ephemeral enabled.
+By default, this paginator will have ephemeral disabled, the instance though has ephemeral enabled.
 ````python
 from discord import Interaction, Embed
 from discord.ext.paginator import paginator
@@ -101,7 +101,7 @@ my_paginator = MyPaginator(
     user,
     config={
         "paginator_ephemeral": True
-    }
+    },
     static_page_count=len(client.guilds),
 )
 ````
@@ -116,15 +116,15 @@ from discord.ext.paginator import paginator
 my_paginator = paginator.Paginator.from_list(
     client,
     user,
-    static_data=[
-        {
-            "embed": discord.Embed(title=guild.name, description=f"This guild has {guild.member_count} members"),
-        } for guild in client.guilds
-    ],
     config={
         "paginator_ephemeral": True,
         "quick_navigation_button_enabled": False
-    }
+    },
+    data=[
+        {
+            "embed": discord.Embed(title=guild.name, description=f"This guild has {guild.member_count} members"),
+        } for guild in client.guilds
+    ]
 )
 ````
 

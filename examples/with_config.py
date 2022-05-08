@@ -61,3 +61,21 @@ async def guild_overwrite_config(interaction: Interaction):
             }
         ).run()  # this instance of the GuildPaginator uses quick nav
     )
+
+
+import discord
+from discord.ext.paginator import paginator
+
+my_paginator = paginator.Paginator.from_list(
+    client,
+    user,
+    config={
+        "paginator_ephemeral": True,
+        "quick_navigation_button_enabled": False
+    },
+    data=[
+        {
+            "embed": discord.Embed(title=guild.name, description=f"This guild has {guild.member_count} members"),
+        } for guild in client.guilds
+    ]
+)
