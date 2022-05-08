@@ -15,6 +15,10 @@ if TYPE_CHECKING:
 class FirstElement(button.BetterButton):
     def __init__(
             self,
+            style: ButtonStyle,
+            label: str,
+            emoji: str,
+            /,
             client: Bot,
             parent: Paginator,
             user: User,
@@ -22,7 +26,9 @@ class FirstElement(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            label="\U000025c0 \U000025c0",
+            style=style,
+            label=label,
+            emoji=emoji,
             disabled=disabled
         )
         self.client = client
@@ -50,6 +56,10 @@ class FirstElement(button.BetterButton):
 class PreviousElement(button.BetterButton):
     def __init__(
             self,
+            style: ButtonStyle,
+            label: str,
+            emoji: str,
+            /,
             client: Bot,
             parent: Paginator,
             user: User,
@@ -57,8 +67,9 @@ class PreviousElement(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.blurple,
-            label="\U000025c0",
+            style=style,
+            label=label,
+            emoji=emoji,
             disabled=disabled
         )
         self.client = client
@@ -87,6 +98,10 @@ class PreviousElement(button.BetterButton):
 class NextElement(button.BetterButton):
     def __init__(
             self,
+            style: ButtonStyle,
+            label: str,
+            emoji: str,
+            /,
             client: Bot,
             parent: Paginator,
             user: User,
@@ -94,8 +109,9 @@ class NextElement(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.blurple,
-            label="\U000025b6",
+            style=style,
+            label=label,
+            emoji=emoji,
             disabled=disabled
         )
         self.client = client
@@ -123,6 +139,10 @@ class NextElement(button.BetterButton):
 class LastElement(button.BetterButton):
     def __init__(
             self,
+            style: ButtonStyle,
+            label: str,
+            emoji: str,
+            /,
             client: Bot,
             parent: Paginator,
             user: User,
@@ -130,7 +150,9 @@ class LastElement(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            label="\U000025b6 \U000025b6",
+            style=style,
+            label=label,
+            emoji=emoji,
             disabled=disabled
         )
         self.client = client
@@ -159,6 +181,10 @@ class LastElement(button.BetterButton):
 class Stop(button.BetterButton):
     def __init__(
             self,
+            style: ButtonStyle,
+            label: str,
+            emoji: str,
+            /,
             client: Bot,
             parent: Paginator,
             user: User,
@@ -166,8 +192,8 @@ class Stop(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.danger,
-            label="Quit",
+            style=style,
+            label=label,
             disabled=disabled
         )
         self.client = client
@@ -198,6 +224,10 @@ class Stop(button.BetterButton):
 class Start(button.BetterButton):
     def __init__(
             self,
+            style: ButtonStyle,
+            label: str,
+            emoji: str,
+            /,
             client: Bot,
             parent: Paginator,
             user: User,
@@ -205,8 +235,9 @@ class Start(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.success,
-            label="Start",
+            style=style,
+            label=label,
+            emoji=emoji,
             disabled=disabled
         )
         self.client = client
@@ -244,6 +275,10 @@ class Start(button.BetterButton):
 class QuickNav(button.BetterButton):
     def __init__(
             self,
+            style: ButtonStyle,
+            label: str,
+            emoji: str,
+            /,
             client: Bot,
             parent: Paginator,
             user: User,
@@ -251,8 +286,9 @@ class QuickNav(button.BetterButton):
             disabled: bool = True
     ):
         super().__init__(
-            style=ButtonStyle.blurple,
-            label="Nav",
+            style=style,
+            label=label,
+            emoji=emoji,
             disabled=disabled
         )
         self.client = client
@@ -276,11 +312,17 @@ class QuickNav(button.BetterButton):
     async def on_click(self, interaction: Interaction):
         await interaction.response.send_modal(modals.QuickNav(parent=self.parent, user=self.user))
 
-class Placeholder(button.BetterButton):
+class Placeholder(button.BetterButton, ABC):
     def __init__(
-            self
+            self,
+            style: ButtonStyle,
+            label: str,
+            emoji: str,
+            /
     ):
         super().__init__(
-            label="\U0001f6ab",
+            style=style,
+            label=label,
+            emoji=emoji,
             disabled=True
         )
