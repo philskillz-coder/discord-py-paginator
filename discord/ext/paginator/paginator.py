@@ -30,8 +30,8 @@ class Paginator(ui.View):
         "quick_navigation_button_style": ButtonStyle.blurple,
         "quick_navigation_button_label": "Nav",
         "quick_navigation_button_emoji": None,
-        "quick_navigation_err_message": "%s is not a number!",  # False means no message
-        "quick_navigation_err_ephemeral": True,
+        "quick_navigation_error_message": "%s is not a number!",  # False means no message
+        "quick_navigation_error_ephemeral": True,
 
         "first_element_button_enabled": True,
         "first_element_button_style": ButtonStyle.secondary,
@@ -155,7 +155,7 @@ class Paginator(ui.View):
         )
 
         self.static_data: Optional[List[Dict[str, Any]]] = kwargs.get("static_data")
-        self.static_data_pages = len(self.static_data or []) or None
+        self.static_data_page_count = len(self.static_data or []) or kwargs.get("static_page_count") or None
 
 
     @classmethod
@@ -262,10 +262,10 @@ class Paginator(ui.View):
         pass
 
     async def acquire_page_count(self, interaction: Interaction) -> int:
-        if self.static_data_pages is None:
+        if self.static_data_page_count is None:
             return await self.get_page_count(interaction)
 
-        return self.static_data_pages
+        return self.static_data_page_count
 
     async def get_page_count(self, interaction: Interaction) -> int:
         raise NotImplementedError("get_page_count must be implemented!")
