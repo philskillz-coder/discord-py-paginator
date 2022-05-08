@@ -12,7 +12,7 @@ GCP_TYPE = Callable[[Interaction, int], Coroutine[Any, Any, Dict[str, Any]]]
 class Paginator(ui.View):
     __CONFIG__: Dict = {                # DO NOT CHANGE THIS! You can add custom config attrs in Paginator.CONFIG
         "paginator_view_timeout": 180,
-        "paginator_ephemeral": True,    # this setting overwrites ephemeral= from get_page_content. if None, not overwritten
+        "paginator_ephemeral": None,    # this setting overwrites ephemeral= from get_page_content. if None, not overwritten
         "paginator_delete_when_finished": True,  # only works when paginator is not ephemeral
         "paginator_delete_delay": 10,
 

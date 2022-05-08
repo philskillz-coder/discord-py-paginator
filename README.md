@@ -46,11 +46,14 @@ or use the [from_list](https://github.com/philskillz-coder/discord-py-paginator/
 import discord
 from discord.ext.paginator import paginator
 
-my_paginator = paginator.Paginator(client, user, static_data=[
-    {
-        "embed": discord.Embed(title=guild.name, description=f"This guild has {guild.member_count} members"),
-        "ephemeral": True,
-    } for guild in client.guilds
+my_paginator = paginator.Paginator.from_list(
+    client,
+    user,
+    data=[
+        {
+            "embed": discord.Embed(title=guild.name, description=f"This guild has {guild.member_count} members"),
+            "ephemeral": True,
+        } for guild in client.guilds
 ])
 ````
 
@@ -67,6 +70,65 @@ More examples can be found [here](https://github.com/philskillz-coder/discord-py
 ## Config
 You can configurate your paginator subclass and instance via a config dict.
 All config options can be found [here](https://github.com/philskillz-coder/discord-py-paginator/blob/main/discord/ext/paginator/paginator.py#L13).
+
+### An example with config
+By default this paginator will have ephemeral disabled, the instance though has ephemeral enabled.
+````python
+from discord import Interaction, Embed
+from discord.ext.paginator import paginator
+
+class MyPaginator(paginator.Paginator):
+    CONFIG = {
+        "paginator_ephemeral": False
+    }
+    
+    async def get_page_count(self, interaction: Interaction) -> int:
+        return len(self.client.guilds)
+    
+    async def get_page_content(self, interaction: Interaction, page: int):
+        guild = self.client.guilds[page]
+        return {
+            "embed": Embed(
+                title=guild.name,
+                description=f"This guild has {guild.member_count} members."
+            ),
+            "ephemeral": True
+        }
+
+
+my_paginator = MyPaginator(
+    client,
+    user,
+    config={
+        "paginator_ephemeral": True
+    }
+    static_page_count=len(client.guilds),
+)
+````
+
+### An example with config (based on static paginator)
+
+This paginator will have the default config options overwritten with the specified config options
+````python
+import discord
+from discord.ext.paginator import paginator
+
+my_paginator = paginator.Paginator.from_list(
+    client,
+    user,
+    static_data=[
+        {
+            "embed": discord.Embed(title=guild.name, description=f"This guild has {guild.member_count} members"),
+        } for guild in client.guilds
+    ],
+    config={
+        "paginator_ephemeral": True,
+        "quick_navigation_button_enabled": False
+    }
+)
+````
+
+### All config options
 
 | **CONFIG NAME**                      | **TYPE**        | **VALUES**                    | **EXPLANATION**                                                            | **INFO**                                                                                                                    
 |--------------------------------------|-----------------|-------------------------------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|

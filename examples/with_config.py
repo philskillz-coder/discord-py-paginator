@@ -4,7 +4,7 @@ from typing import Dict, Any
 
 class GuildPaginator(paginator.Paginator):
     CONFIG = {
-        "use_quick_nav": False  # this paginator never uses quick nav by default
+        "quick_navigation_button_enabled": False  # this paginator never uses quick nav by default
     }
 
     async def get_page_count(self, interaction: Interaction) -> int:
@@ -57,7 +57,7 @@ async def guild_overwrite_config(interaction: Interaction):
             interaction.client,
             interaction.user,
             config={
-                "use_quick_nav": True
+                "quick_navigation_button_enabled": True
             }
         ).run()  # this instance of the GuildPaginator uses quick nav
     )
