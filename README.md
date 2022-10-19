@@ -59,7 +59,7 @@ await interaction.response.send_message(
 )
 `````
 
-More examples can be found [here](https://github.com/philskillz-coder/discord-py-paginator/tree/main/examples)
+More examples can be found [here](https://github.com/philskillz-coder/discord-py-paginator/tree/main/examples) (currently no examples, i will add some)
 
 ## Config
 You can configure your paginator subclass and instance via a config dict.
