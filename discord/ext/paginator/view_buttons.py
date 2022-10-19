@@ -267,6 +267,8 @@ class Start(button.BetterButton):
 
     async def on_click(self, interaction: Interaction):
         await self.parent._child_paginator_start(interaction)
+        await self.parent._child_update_page_number(interaction, 0)
+        await self.parent._child_update_page_content(interaction)
 
 
 class QuickNav(button.BetterButton):
