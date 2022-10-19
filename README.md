@@ -22,7 +22,6 @@ Step by step:<br/>
 ```python
 from discord import Interaction, Embed
 from discord.ext.paginator import paginator
-from discord.ext.paginator import paginator
 from discord import Color
 
 class MySimplePaginator(paginator.Paginator):
