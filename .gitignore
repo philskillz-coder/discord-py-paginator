@@ -3,6 +3,8 @@ poetry.lock
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
+_test.py
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

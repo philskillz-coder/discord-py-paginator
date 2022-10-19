@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .paginator import Paginator
 
+
 class FirstElement(button.BetterButton):
     def __init__(
             self,
@@ -50,8 +51,9 @@ class FirstElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.update_page_number(interaction, 0)
-        await self.parent.update_page_content(interaction)
+        await self.parent._child_update_page_number(interaction, 0)
+        await self.parent._child_update_page_content(interaction)
+
 
 class PreviousElement(button.BetterButton):
     def __init__(
@@ -91,8 +93,8 @@ class PreviousElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.update_page_number(interaction, self.parent.page - 1)
-        await self.parent.update_page_content(interaction)
+        await self.parent._child_update_page_number(interaction, self.parent.page - 1)
+        await self.parent._child_update_page_content(interaction)
 
 
 class NextElement(button.BetterButton):
@@ -133,8 +135,9 @@ class NextElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.update_page_number(interaction, self.parent.page + 1)
-        await self.parent.update_page_content(interaction)
+        await self.parent._child_update_page_number(interaction, self.parent.page + 1)
+        await self.parent._child_update_page_content(interaction)
+
 
 class LastElement(button.BetterButton):
     def __init__(
@@ -174,8 +177,8 @@ class LastElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.update_page_number(interaction, await self.parent.acquire_page_count(interaction)-1)
-        await self.parent.update_page_content(interaction)
+        await self.parent._child_update_page_number(interaction, await self.parent.acquire_page_count(interaction) - 1)
+        await self.parent._child_update_page_content(interaction)
 
 
 class Stop(button.BetterButton):
@@ -215,11 +218,12 @@ class Stop(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.paginator_stop(interaction)
+        await self.parent._child_paginator_stop(interaction)
         await interaction.response.send_message(
             content="Stopped",
             ephemeral=True
         )
+
 
 class Start(button.BetterButton):
     def __init__(
@@ -259,15 +263,15 @@ class Start(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent.paginator_start(interaction)
+        await self.parent._child_paginator_start(interaction)
         await interaction.response.defer()
 
-        values = await self.parent.acquire_page_content(interaction)
+        values = await self.parent._child_update_page_content(interaction)
         values["view"] = self.parent
 
         ws = interaction.followup
         await ws.edit_message(
-            (await interaction.original_message()).id,
+            (await interaction.original_response()).id,
             **values
         )
 
@@ -312,7 +316,8 @@ class QuickNav(button.BetterButton):
     async def on_click(self, interaction: Interaction):
         await interaction.response.send_modal(modals.QuickNav(parent=self.parent, user=self.user))
 
-class Placeholder(button.BetterButton, ABC):
+
+class Placeholder(button.BetterButton):
     def __init__(
             self,
             style: ButtonStyle,

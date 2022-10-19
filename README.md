@@ -2,21 +2,23 @@
 A view paginator for [discord.py](https://github.com/Rapptz/discord.py)
 
 ## Installing
-This libary requires [discord.py](https://github.com/Rapptz/discord.py) v2.0:
+This library works with [discord.py](https://github.com/Rapptz/discord.py) v2.1.0a:
 
 ```sh
 pip install git+https://github.com/philskillz-coder/discord-py-paginator
 ```
 
 ## Usage
-To make your own paginator simply subclass [paginator.Paginator](https://github.com/philskillz-coder/discord-py-paginator/blob/main/discord/ext/paginator/paginator.py?#L12) and overwrite the methods: <br/>
- - [get_page_count](https://github.com/philskillz-coder/discord-py-paginator/blob/main/discord/ext/paginator/paginator.py?#L270) ~ you can also pass ``static_page_count`` variable to the instructor of ``paginator.Paginator``
- - [get_page_content](https://github.com/philskillz-coder/discord-py-paginator/blob/main/discord/ext/paginator/paginator.py?#L300)
+Step by step:<br/>
+1. Create a class with ``paginator.Paginator`` as its parent
+2. Create the ``Paginator.page_update`` method:</br>
+   - In this method you get the interaction object and the current page passed.
+   - In this method you can use the interaction object as in your commands.
+3. Create the ``Paginator.get_page_count`` method (or set the ``static_page_count`` variable):</br>
+   - In this method you get the interaction object passed.
+   - Returns, how many pages you have. (If you have 'infinite' pages you can return ``None``)
 
-#### IMPORTANT: <br/>
-Do not confuse ``get_page_count`` with ``acquire_page_count``! Only overwrite ``get_page_count`` <br/>
-The same goes for ``get_page_content`` and ``acquire_page_content``
-
+## An example paginator class:
 ```python
 from discord import Interaction, Embed
 from discord.ext.paginator import paginator
@@ -25,42 +27,32 @@ class MyPaginator(paginator.Paginator):
     async def get_page_count(self, interaction: Interaction) -> int:
         return len(self.client.guilds)
     
-    async def get_page_content(self, interaction: Interaction, page: int):
+    async def page_update(self, interaction: Interaction, page: int):
         guild = self.client.guilds[page]
-        return {
-            "embed": Embed(
-                title=guild.name,
-                description=f"This guild has {guild.member_count} members."
-            ),
-            "ephemeral": True
-        }
-
-my_paginator = MyPaginator(client, user)
-# or
-my_paginator = MyPaginator(client, user, static_page_count=len(client.guilds))
+        await interaction.response.edit_message(
+            embed=Embed(
+                title="Guild %s" % guild.name,
+            )
+                .add_field(
+                    name="Member count",
+                    value="This guild has %s members" % guild.member_count
+            )
+                .add_field(
+                    name="Created at",
+                    value="This guild was created at " % guild.created_at
+            )
+        )
 ```
-
-or use the [from_list](https://github.com/philskillz-coder/discord-py-paginator/blob/main/discord/ext/paginator/paginator.py?#L162) method to create a paginator from a list of data.
-
-````python
-import discord
-from discord.ext.paginator import paginator
-
-my_paginator = paginator.Paginator.from_list(
-    client,
-    user,
-    data=[
-        {
-            "embed": discord.Embed(title=guild.name, description=f"This guild has {guild.member_count} members"),
-            "ephemeral": True,
-        } for guild in client.guilds
-])
-````
 
 to send you paginator do the following:
 `````python
+my_paginator = MyPaginator(
+   client=interaction.client,
+   user=interaction.user
+)
+
 await interaction.response.send_message(
-    content="A paginator",
+    content="My awesome guild paginator",
     view=await my_paginator.run()
 )
 `````
@@ -68,71 +60,13 @@ await interaction.response.send_message(
 More examples can be found [here](https://github.com/philskillz-coder/discord-py-paginator/tree/main/examples)
 
 ## Config
-You can configurate your paginator subclass and instance via a config dict.
-All config options can be found [here](https://github.com/philskillz-coder/discord-py-paginator/blob/main/discord/ext/paginator/paginator.py#L13).
-
-### An example with config
-By default, this paginator will have ephemeral disabled, the instance though has ephemeral enabled.
-````python
-from discord import Interaction, Embed
-from discord.ext.paginator import paginator
-
-class MyPaginator(paginator.Paginator):
-    CONFIG = {
-        "paginator_ephemeral": False
-    }
-    
-    async def get_page_count(self, interaction: Interaction) -> int:
-        return len(self.client.guilds)
-    
-    async def get_page_content(self, interaction: Interaction, page: int):
-        guild = self.client.guilds[page]
-        return {
-            "embed": Embed(
-                title=guild.name,
-                description=f"This guild has {guild.member_count} members."
-            ),
-            "ephemeral": True
-        }
-
-
-my_paginator = MyPaginator(
-    client,
-    user,
-    config={
-        "paginator_ephemeral": True
-    },
-    static_page_count=len(client.guilds),
-)
-````
-
-### An example with config (based on static paginator)
-
-This paginator will have the default config options overwritten with the specified config options
-````python
-import discord
-from discord.ext.paginator import paginator
-
-my_paginator = paginator.Paginator.from_list(
-    client,
-    user,
-    config={
-        "paginator_ephemeral": True,
-        "quick_navigation_button_enabled": False
-    },
-    data=[
-        {
-            "embed": discord.Embed(title=guild.name, description=f"This guild has {guild.member_count} members"),
-        } for guild in client.guilds
-    ]
-)
-````
+You can configure your paginator subclass and instance via a config dict.
+An example with config can be found in the examples folder
 
 ### All config options
 
 | **CONFIG NAME**                      | **TYPE**        | **VALUES**                    | **EXPLANATION**                                                            | **INFO**                                                                                                                    
 |--------------------------------------|-----------------|-------------------------------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| ``paginator_ephemeral``              | ``bool``        | ``True``, ``False``, ``None`` | _Paginator response ephemeral_                                             | This config option overwrites the ``ephemeral`` option returned from ``get_page_content``. If ``None``, the not overwritten |
 | ``paginator_delete_when_finished``   | ``bool``        | ``True``, ``False``           | _Delete the pagination message when stopped_                               | Only works if the paginator message is not ephemeral                                                                        |
 | ``paginator_delete_delay``           | ``int``         | Any                           | _How long to wait after paginator stop to delete the message_              |                                                                                                                             |
 |                                      |                 |                               |                                                                            |                                                                                                                             |
