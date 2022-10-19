@@ -177,7 +177,10 @@ class LastElement(button.BetterButton):
         )
 
     async def on_click(self, interaction: Interaction):
-        await self.parent._child_update_page_number(interaction, await self.parent.acquire_page_count(interaction) - 1)
+        await self.parent._child_update_page_number(
+            interaction,
+            (await self.parent.get_page_count(interaction) or self.parent.page+1)-1
+        )
         await self.parent._child_update_page_content(interaction)
 
 
@@ -264,16 +267,6 @@ class Start(button.BetterButton):
 
     async def on_click(self, interaction: Interaction):
         await self.parent._child_paginator_start(interaction)
-        await interaction.response.defer()
-
-        values = await self.parent._child_update_page_content(interaction)
-        values["view"] = self.parent
-
-        ws = interaction.followup
-        await ws.edit_message(
-            (await interaction.original_response()).id,
-            **values
-        )
 
 
 class QuickNav(button.BetterButton):

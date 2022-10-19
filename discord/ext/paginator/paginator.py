@@ -249,6 +249,7 @@ class Paginator(ui.View):
             self.add_item(view_buttons.Placeholder(*placeholder_config))
 
         await self.on_start(interaction)
+        await self.page_update(interaction, 0)
 
     async def _child_paginator_stop(self, interaction: Interaction):
         if self.config["paginator_delete_when_finished"]:
