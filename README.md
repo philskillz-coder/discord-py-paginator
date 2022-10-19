@@ -22,31 +22,34 @@ Step by step:<br/>
 ```python
 from discord import Interaction, Embed
 from discord.ext.paginator import paginator
+from discord.ext.paginator import paginator
+from discord import Color
 
-class MyPaginator(paginator.Paginator):
+class MySimplePaginator(paginator.Paginator):
+    _cached_page_count = None
+
     async def get_page_count(self, interaction: Interaction) -> int:
-        return len(self.client.guilds)
-    
+        self._cached_page_count = len(self.client.guilds)
+        return self._cached_page_count
+
     async def page_update(self, interaction: Interaction, page: int):
         guild = self.client.guilds[page]
+
         await interaction.response.edit_message(
             embed=Embed(
                 title="Guild %s" % guild.name,
+                colour=Color.green()
             )
-                .add_field(
-                    name="Member count",
-                    value="This guild has %s members" % guild.member_count
-            )
-                .add_field(
-                    name="Created at",
-                    value="This guild was created at " % guild.created_at
-            )
+            .add_field(name="ID", value=str(guild.id))
+            .add_field(name="Member count", value=str(guild.member_count))
+            .set_author(name=f"Page {page + 1}/{self._cached_page_count}"),
+            view=self  # !very important! 
         )
 ```
 
 to send you paginator do the following:
 `````python
-my_paginator = MyPaginator(
+my_paginator = MySimplePaginator(
    client=interaction.client,
    user=interaction.user
 )
