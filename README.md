@@ -30,7 +30,9 @@ class MySimplePaginator(paginator.Paginator):
     async def get_page_count(self, interaction: Interaction) -> int:
         self._cached_page_count = len(self.client.guilds)
         return self._cached_page_count
-
+   
+    # this is called everytime a user switches to another page
+    # the page argument is the page the user wants to see, beginning at 0 and ending at get_page_count()-1
     async def page_update(self, interaction: Interaction, page: int):
         guild = self.client.guilds[page]
 
