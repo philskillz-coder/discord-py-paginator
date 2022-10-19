@@ -16,7 +16,7 @@ Step by step:<br/>
    - In this method you can use the interaction object as in your commands.
 3. Create the ``Paginator.get_page_count`` method (or set the ``static_page_count`` variable):</br>
    - In this method you get the interaction object passed.
-   - Returns, how many pages you have. (If you have 'infinite' pages you can return ``None``)
+   - Returns, how many pages you have. (~~If you have 'infinite' pages you can return ``None``~~ not possible yet)
 
 ## An example paginator class:
 ```python
