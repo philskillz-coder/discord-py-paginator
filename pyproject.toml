@@ -4,7 +4,3 @@ version = "2.0.0"
 description = "A paginator using views and buttons"
 authors = ["Philskillz <kek.notanactualemail.com>"]
 license = "MIT"
-packages = [{ include = "discord.py" }]
-
-[build-system]
-requires = ["discord.py>=2.1.0a"]
