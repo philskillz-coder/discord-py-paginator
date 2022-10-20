@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "discord-ext-paginator"
-version = "2.0.3B"
+version = "2.0.4A"
 description = "A paginator using views and buttons"
 authors = ["Philskillz <kek.notanactualemail.com>"]
 license = "MIT"
