@@ -1,5 +1,12 @@
 # discord-py-paginator
-A view paginator for [discord.py](https://github.com/Rapptz/discord.py)
+A view paginator for [discord.py](https://github.com/Rapptz/discord.py)</br></br>
+This paginator is your best choice  if you want to display</br>
+- large amounts of data (image gallery)
+- Updating Lists (``client.users``)
+- Live generating data (any database)
+
+**Keep in mind that this paginator is very complex and requires decent discord.py knowledge**</br>
+**If you need any help regarding my paginator you can contact me [here](https://discord/APGDCfZbpW) (do _not_ ask in the discord.py server, they don't help with third-party libaries)**
 
 ## Installing
 This library works with [discord.py](https://github.com/Rapptz/discord.py) v2.1.0a:
@@ -19,34 +26,7 @@ Step by step:<br/>
    - Returns, how many pages you have. (~~If you have 'infinite' pages you can return ``None``~~ not possible yet)
 
 ## An example paginator class:
-```python
-from discord import Interaction, Embed
-from discord.ext.paginator import paginator
-from discord import Color
-
-class MySimplePaginator(paginator.Paginator):
-    _cached_page_count = None
-
-    async def get_page_count(self, interaction: Interaction) -> int:
-        self._cached_page_count = len(self.client.guilds)
-        return self._cached_page_count
-   
-    # this is called everytime a user switches to another page
-    # the page argument is the page the user wants to see, beginning at 0 and ending at get_page_count()-1
-    async def page_update(self, interaction: Interaction, page: int):
-        guild = self.client.guilds[page]
-
-        await interaction.response.edit_message(
-            embed=Embed(
-                title="Guild %s" % guild.name,
-                colour=Color.green()
-            )
-            .add_field(name="ID", value=str(guild.id))
-            .add_field(name="Member count", value=str(guild.member_count))
-            .set_author(name=f"Page {page + 1}/{self._cached_page_count}"),
-            view=self  # !very important! 
-        )
-```
+*Example removed because it was too complex. Contact me for help*
 
 to send you paginator do the following:
 `````python
