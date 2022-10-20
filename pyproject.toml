@@ -13,5 +13,5 @@ python = "^3.8"
 "discord.py" = { git = "https://github.com/Rapptz/discord.py.git", branch = "master" }
 
 [build-system]
-requires = ["git+https://github.com/Rapptz/discord.py.git>=2.1.0"]
+requires = ["discord.py>=2.0.1"]
 build-backend = "poetry.core.masonry.api"
