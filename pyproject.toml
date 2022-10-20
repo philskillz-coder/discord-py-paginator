@@ -12,6 +12,3 @@ python = "^3.8"
 [tool.poetry.dev-dependencies]
 "discord.py" = { git = "https://github.com/Rapptz/discord.py.git", branch = "master" }
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
