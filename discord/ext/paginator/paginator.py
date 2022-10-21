@@ -251,11 +251,13 @@ class Paginator(ui.View):
         await self.on_start(interaction)
 
     async def _child_paginator_stop(self, interaction: Interaction):
-        if self.config["paginator_delete_when_finished"]:
-            if interaction.message.flags.ephemeral:
-                await interaction.message.delete(
-                    delay=self.config["paginator_delete_delay"]
-                )
+        if (
+            self.config["paginator_delete_when_finished"]
+            and interaction.message.flags.ephemeral
+        ):
+            await interaction.message.delete(
+                delay=self.config["paginator_delete_delay"]
+            )
 
         await self.on_stop(interaction)
         super().stop()

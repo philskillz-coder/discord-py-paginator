@@ -33,12 +33,12 @@ class ButtonMeta(type):
     __error_handlers__: Dict[Type[errors.ButtonException], ButtonErrorHandler] = {}
     __checks__: Dict[int, ButtonCheck] = {}
 
-    def __new__(mcs, *args: Any, **kwargs: Any):
+    def __new__(cls, *args: Any, **kwargs: Any):
         name, bases, attrs = args
         error_handlers = {}
         checks = {}
 
-        new_cls = super().__new__(mcs, *args, **kwargs)
+        new_cls = super().__new__(cls, *args, **kwargs)
         for base in reversed(new_cls.__mro__):
             for elem, value in base.__dict__.items():
                 if isinstance(value, ButtonErrorHandler):
