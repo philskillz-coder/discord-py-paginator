@@ -8,7 +8,17 @@ This paginator is your best choice  if you want to display</br>
 **Keep in mind that this paginator is very complex and requires decent discord.py knowledge**</br>
 **If you need any help regarding my paginator you can contact me [here](https://discord/APGDCfZbpW) (do _not_ ask in the discord.py server, they don't help with third-party libaries)**
 
-## Installing
+# Issue reports
+Issue reports are appreciated.
+You can report one via
+- the repositories [issues page](https://github.com/philskillz-coder/discord-py-paginator/issues)
+- [Mail](mailto:github@theskz.dev?subject=Issue%20report%20for%20discord-py-paginator&body=Repository%20link%3A%0D%0Ahttps%3A%2F%2Fgithub.com%2Fphilskillz-coder%2Fdiscord-py-paginator)
+- my [Discord Server](https://discord.gg/QjntPW9fHc)
+- Discord direct message to `Philskillz_#0266`
+
+thanks in advance.
+
+# Install
 This library works with [discord.py](https://github.com/Rapptz/discord.py) v2.1.0a:
 
 ```sh
