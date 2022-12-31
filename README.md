@@ -35,9 +35,11 @@ Step by step:<br/>
    - Returns, how many pages you have. (~~If you have 'infinite' pages you can return ``None``~~ not possible yet)
 
 ## An example paginator class:
-*Example removed because it was too complex. Contact me for help*
+*Example in readme removed because it was too complex.<br> Contact me for help or look in the examples*
 
-to send you paginator do the following:
+<br>
+
+To send you paginator do the following:
 `````python
 my_paginator = MySimplePaginator(
    client=interaction.client,
