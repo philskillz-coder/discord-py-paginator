@@ -1,14 +1,14 @@
-from discord import ui, User, Interaction, Webhook, Client, ButtonStyle
+from typing import Dict, Any, Union, Callable, Coroutine
+
+from discord import ui, User, Interaction, Client, ButtonStyle
 from discord.ext.commands import Bot
 
 from . import view_buttons
 
-from typing import Dict, Any, List, Union, Optional, Callable, Coroutine
-
 GCP_TYPE = Callable[[Interaction, int], Coroutine[Any, Any, Dict[str, Any]]]
 
 
-class ClassConfig:
+class Paginator(ui.View):
     paginator_view_timeout: int = 180
     paginator_delete_when_finished: bool = True  # only works when paginator is not ephemeral
     paginator_delete_delay = 10
@@ -52,134 +52,65 @@ class ClassConfig:
     placeholder_button_label: str = "\U0001f6ab"
     placeholder_button_emoji: str = None
 
-
-class Unset:
-    pass
-
-
-class InstanceConfig:
-    paginator_view_timeout: int = Unset
-    paginator_delete_when_finished: bool = Unset  # only works when paginator is not ephemeral
-    paginator_delete_delay = Unset
-
-    start_button_style: ButtonStyle = Unset
-    start_button_label: str = Unset
-    start_button_emoji: str = Unset
-
-    stop_button_style: ButtonStyle = Unset
-    stop_button_label: str = Unset
-    stop_button_emoji: str = Unset
-
-    quick_navigation_button_enabled: bool = Unset
-    quick_navigation_button_style: ButtonStyle = Unset
-    quick_navigation_button_label: str = Unset
-    quick_navigation_button_emoji: str = Unset
-    quick_navigation_error_message: str = Unset  # None means no message
-
-    first_element_button_enabled: bool = Unset
-    first_element_button_style: ButtonStyle = Unset
-    first_element_button_label: str = Unset  # None means no label
-    first_element_button_emoji: str = Unset
-
-    prev_element_button_enabled: bool = Unset
-    prev_element_button_style: ButtonStyle = Unset
-    prev_element_button_label: str = Unset
-    prev_element_button_emoji: str = Unset
-
-    next_element_button_enabled: bool = Unset
-    next_element_button_style: ButtonStyle = Unset
-    next_element_button_label: str = Unset
-    next_element_button_emoji: str = Unset
-
-    last_element_button_enabled: bool = Unset
-    last_element_button_style: ButtonStyle = Unset
-    last_element_button_label: str = Unset
-    last_element_button_emoji: str = Unset
-
-    placeholder_button_enabled: bool = Unset
-    placeholder_button_style: ButtonStyle = Unset
-    placeholder_button_label: str = Unset
-    placeholder_button_emoji: str = Unset
-
-
-class Paginator(ui.View):
-    CLASS_CONFIG = ClassConfig()
-
-    @staticmethod
-    def merge_config(instance_config: InstanceConfig) -> ClassConfig:
-        if instance_config is None:
-            return ClassConfig()
-
-        for key, value in Paginator.CLASS_CONFIG.__class__.__dict__.items():
-            if key.startswith("__"):
-                continue
-
-            if getattr(instance_config, key) is Unset:
-                setattr(instance_config, key, value)
-
-        return instance_config
-
     def __init__(
             self,
             client: Union[Bot, Client],
-            user: User,
-            config: Optional[InstanceConfig] = None,
+            user: User
     ):
-        self.config = self.merge_config(config)
-        super().__init__(timeout=config.paginator_view_timeout)
+        super().__init__(timeout=self.paginator_view_timeout)
 
         self.client = client
         self.user = user
         self.page = 0
 
         self.first_elem_btn = view_buttons.FirstElement(
-            config.first_element_button_style,
-            config.first_element_button_label,
-            config.first_element_button_emoji,
+            self.first_element_button_style,
+            self.first_element_button_label,
+            self.first_element_button_emoji,
             client=client,
             parent=self,
             user=user,
-            using=config.first_element_button_enabled,
+            using=self.first_element_button_enabled,
             disabled=True
         )
 
         self.prev_elem_btn = view_buttons.PreviousElement(
-            config.prev_element_button_style,
-            config.prev_element_button_label,
-            config.prev_element_button_emoji,
+            self.prev_element_button_style,
+            self.prev_element_button_label,
+            self.prev_element_button_emoji,
             client=client,
             parent=self,
             user=user,
-            using=config.prev_element_button_enabled,
+            using=self.prev_element_button_enabled,
             disabled=True
         )
 
         self.next_elem_btn = view_buttons.NextElement(
-            config.next_element_button_style,
-            config.next_element_button_label,
-            config.next_element_button_emoji,
+            self.next_element_button_style,
+            self.next_element_button_label,
+            self.next_element_button_emoji,
             client=client,
             parent=self,
             user=user,
-            using=config.next_element_button_enabled,
+            using=self.next_element_button_enabled,
             disabled=True
         )
 
         self.last_elem_btn = view_buttons.LastElement(
-            config.last_element_button_style,
-            config.last_element_button_label,
-            config.last_element_button_emoji,
+            self.last_element_button_style,
+            self.last_element_button_label,
+            self.last_element_button_emoji,
             client=client,
             parent=self,
             user=user,
-            using=config.last_element_button_enabled,
+            using=self.last_element_button_enabled,
             disabled=True
         )
 
         self.start_btn = view_buttons.Start(
-            config.start_button_style,
-            config.start_button_label,
-            config.start_button_emoji,
+            self.start_button_style,
+            self.start_button_label,
+            self.start_button_emoji,
             client=client,
             parent=self,
             user=user,
@@ -188,9 +119,9 @@ class Paginator(ui.View):
         )
 
         self.stop_btn = view_buttons.Stop(
-            config.stop_button_style,
-            config.stop_button_label,
-            config.stop_button_emoji,
+            self.stop_button_style,
+            self.stop_button_label,
+            self.stop_button_emoji,
             client=self.client,
             parent=self,
             user=user,
@@ -199,13 +130,13 @@ class Paginator(ui.View):
         )
 
         self.quick_nav_btn = view_buttons.QuickNav(
-            config.quick_navigation_button_style,
-            config.quick_navigation_button_label,
-            config.quick_navigation_button_emoji,
+            self.quick_navigation_button_style,
+            self.quick_navigation_button_label,
+            self.quick_navigation_button_emoji,
             client=self.client,
             parent=self,
             user=user,
-            using=config.quick_navigation_button_enabled,
+            using=self.quick_navigation_button_enabled,
             disabled=True
         )
 
@@ -227,34 +158,34 @@ class Paginator(ui.View):
     # noinspection PyArgumentList
     async def add_buttons(self):
         placeholder_config = (
-            self.config.placeholder_button_style,
-            self.config.placeholder_button_label,
-            self.config.placeholder_button_emoji
+            self.placeholder_button_style,
+            self.placeholder_button_label,
+            self.placeholder_button_emoji
         )
 
         # first element, previous element
-        if self.config.first_element_button_enabled:
+        if self.first_element_button_enabled:
             self.add_item(self.first_elem_btn)
-        if self.config.prev_element_button_enabled:
+        if self.prev_element_button_enabled:
             self.add_item(self.prev_elem_btn)
 
         self.add_item(self.start_btn)
 
         # next element, last element
-        if self.config.next_element_button_enabled:
+        if self.next_element_button_enabled:
             self.add_item(self.next_elem_btn)
-        if self.config.last_element_button_enabled:
+        if self.last_element_button_enabled:
             self.add_item(self.last_elem_btn)
 
         # placeholders
-        if self.config.placeholder_button_enabled:
+        if self.placeholder_button_enabled:
             self.add_item(view_buttons.Placeholder(*placeholder_config))
             self.add_item(view_buttons.Placeholder(*placeholder_config))
 
         self.add_item(self.stop_btn)
 
         # placeholders
-        if self.config.placeholder_button_enabled:
+        if self.placeholder_button_enabled:
             self.add_item(view_buttons.Placeholder(*placeholder_config))
             self.add_item(view_buttons.Placeholder(*placeholder_config))
 
@@ -269,36 +200,36 @@ class Paginator(ui.View):
         self.quick_nav_btn.disabled = False
 
         placeholder_config = (
-            self.config.placeholder_button_style,
-            self.config.placeholder_button_label,
-            self.config.placeholder_button_emoji
+            self.placeholder_button_style,
+            self.placeholder_button_label,
+            self.placeholder_button_emoji
         )
 
         # first element, previous element
-        if self.config.first_element_button_enabled:
+        if self.first_element_button_enabled:
             self.add_item(self.first_elem_btn)
-        if self.config.prev_element_button_enabled:
+        if self.prev_element_button_enabled:
             self.add_item(self.prev_elem_btn)
 
         # quick nav
-        if self.config.quick_navigation_button_enabled:
+        if self.quick_navigation_button_enabled:
             self.add_item(self.quick_nav_btn)
 
         # next element, last element
-        if self.config.next_element_button_enabled:
+        if self.next_element_button_enabled:
             self.add_item(self.next_elem_btn)
-        if self.config.last_element_button_enabled:
+        if self.last_element_button_enabled:
             self.add_item(self.last_elem_btn)
 
         # placeholders
-        if self.config.placeholder_button_enabled:
+        if self.placeholder_button_enabled:
             self.add_item(view_buttons.Placeholder(*placeholder_config))
             self.add_item(view_buttons.Placeholder(*placeholder_config))
 
         self.add_item(self.stop_btn)
 
         # placeholders
-        if self.config.placeholder_button_enabled:
+        if self.placeholder_button_enabled:
             self.add_item(view_buttons.Placeholder(*placeholder_config))
             self.add_item(view_buttons.Placeholder(*placeholder_config))
 
@@ -306,11 +237,11 @@ class Paginator(ui.View):
 
     async def child_paginator_stop(self, interaction: Interaction):
         if (
-                self.config.paginator_delete_when_finished
+                self.paginator_delete_when_finished
                 and not interaction.message.flags.ephemeral
         ):
             await interaction.message.delete(
-                delay=self.config.paginator_delete_delay
+                delay=self.paginator_delete_delay
             )
 
         await self.on_stop(interaction)

@@ -34,7 +34,6 @@ class ButtonMeta(type):
     __checks__: Dict[int, ButtonCheck] = {}
 
     def __new__(cls, *args: Any, **kwargs: Any):
-        name, bases, attrs = args
         error_handlers = {}
         checks = {}
 
@@ -52,7 +51,7 @@ class ButtonMeta(type):
 
         return new_cls
 
-    def __init__(cls, *args: Any, **kwargs: Any) -> None:
+    def __init__(cls, *args: Any, **_: Any) -> None:
         super().__init__(*args)
 
 

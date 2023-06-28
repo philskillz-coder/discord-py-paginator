@@ -40,5 +40,5 @@ class QuickNav(ui.Modal, title="Quick Navigation"):
             await interaction.response.send_message(f"`{self.page}` is not a number!")
             raise ValueError("Not a number")  # add better error message
 
-        await self.parent.__child_update_page_number(interaction, int(str(self.page)) - 1)
-        await self.parent._child_update_page_content(interaction)
+        await self.parent.child_update_page_number(interaction, int(str(self.page)) - 1)
+        await self.parent.child_update_page_content(interaction)

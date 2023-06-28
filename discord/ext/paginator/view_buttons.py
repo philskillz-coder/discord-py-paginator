@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from abc import ABC
+from typing import TYPE_CHECKING
 
 from discord import ButtonStyle, User, Interaction
 from discord.ext.commands import Bot
 
 from . import button, errors, modals
-
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .paginator import Paginator
