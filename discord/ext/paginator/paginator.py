@@ -110,7 +110,7 @@ class Paginator(ui.View):
         if instance_config is None:
             return ClassConfig()
 
-        for key, value in Paginator.CLASS_CONFIG.__dict__.items():
+        for key, value in Paginator.CLASS_CONFIG.__class__.__dict__.items():
             if key.startswith("__"):
                 continue
 
