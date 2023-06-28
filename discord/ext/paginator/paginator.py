@@ -47,10 +47,10 @@ class ClassConfig:
     last_element_button_label: str = "\U000025b6 \U000025b6"
     last_element_button_emoji: str = None
 
-    placeholder_button_enabled: bool = True,
-    placeholder_button_style: ButtonStyle = ButtonStyle.secondary,
-    placeholder_button_label: str = "\U0001f6ab",
-    placeholder_button_emoji: str = None,
+    placeholder_button_enabled: bool = True
+    placeholder_button_style: ButtonStyle = ButtonStyle.secondary
+    placeholder_button_label: str = "\U0001f6ab"
+    placeholder_button_emoji: str = None
 
 
 class Unset:
