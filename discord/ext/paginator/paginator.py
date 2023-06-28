@@ -248,7 +248,7 @@ class Paginator(ui.View):
 
         # placeholders
         if self.config.placeholder_button_enabled:
-            self.add_item(view_buttons.Placeholder())
+            self.add_item(view_buttons.Placeholder(*placeholder_config))
             self.add_item(view_buttons.Placeholder(*placeholder_config))
 
         self.add_item(self.stop_btn)
