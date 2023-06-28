@@ -103,7 +103,7 @@ class InstanceConfig:
 
 
 class Paginator(ui.View):
-    CLASS_CONFIG: ClassConfig()
+    CLASS_CONFIG = ClassConfig()
 
     @staticmethod
     def merge_config(instance_config: InstanceConfig) -> ClassConfig:
