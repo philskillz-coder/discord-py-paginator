@@ -39,17 +39,42 @@ Step by step:<br/>
 
 <br>
 
-To send you paginator do the following:
+A very basic paginator
 `````python
-my_paginator = MySimplePaginator(
-   client=interaction.client,
-   user=interaction.user
-)
+class GuildPaginator(paginator.Paginator):
+    async def get_page_count(self, interaction: Interaction) -> int:
+        return len(self.client.guilds)
 
-await interaction.response.send_message(
-    content="My awesome guild paginator",
-    view=await my_paginator.run()
+    async def page_update(self, interaction: Interaction, current_page: int):
+        guild = self.client.guilds[current_page]
+
+        return await interaction.response.edit_message(
+            content=f"Guild {current_page + 1}/{await self.get_page_count(interaction)}",
+            embed=(
+                Embed(
+                    title="Guild",
+                    colour=Color.green()
+                )
+                .add_field(name="Name", value=guild.name)
+                .add_field(name="ID", value=str(guild.id))
+                .add_field(name="Member count", value=str(guild.member_count), inline=False)
+            ),
+            view=self
+        )
+
+
+@bot.command(
+    name="guilds",
+    description="Show all the guilds"
 )
+async def show_guilds(ctx: commands.Context):
+    await ctx.send(
+        content="The bot guilds",
+        view=await GuildPaginator(
+            ctx.bot,
+            ctx.author
+        ).run()
+    )
 `````
 <br>
 
