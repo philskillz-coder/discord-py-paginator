@@ -13,7 +13,7 @@ You can report one via
 - the repositories [issues page](https://github.com/philskillz-coder/discord-py-paginator/issues)
 - [Mail](mailto:github@theskz.dev?subject=Issue%20report%20for%20discord-py-paginator&body=Repository%20link%3A%0D%0Ahttps%3A%2F%2Fgithub.com%2Fphilskillz-coder%2Fdiscord-py-paginator)
 - my [Discord Server](https://discord.gg/QjntPW9fHc)
-- Discord direct message to `Philskillz_#0266`
+- Discord direct message to `philskillz_`
 
 thanks in advance.
 
