@@ -82,7 +82,7 @@ async def show_guilds(ctx: commands.Context):
         ).run()
     )
 
-with open("token", "r") as f:
+with open("TOKEN", "r") as f:
     token = f.read()
 
 bot.run(
