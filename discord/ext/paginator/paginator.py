@@ -8,6 +8,9 @@ from . import view_buttons
 GCP_TYPE = Callable[[Interaction, int], Coroutine[Any, Any, Dict[str, Any]]]
 
 
+# todo: button where nav is right now -> page/page_max
+# todo: move nav down
+# todo: search button
 class Paginator(ui.View):
     paginator_view_timeout: int = 180
     paginator_delete_when_finished: bool = True  # only works when paginator is not ephemeral
