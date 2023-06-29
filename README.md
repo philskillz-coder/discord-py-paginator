@@ -35,11 +35,7 @@ Step by step:<br/>
    - Returns, how many pages you have. (~~If you have 'infinite' pages you can return ``None``~~ not possible yet)
 
 ## An example paginator class:
-*Example in readme removed because it was too complex.<br> Contact me for help or look in the examples*
 
-<br>
-
-A very basic paginator
 `````python
 class GuildPaginator(paginator.Paginator):
     async def get_page_count(self, interaction: Interaction) -> int:
