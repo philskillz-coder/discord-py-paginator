@@ -84,22 +84,20 @@ additionally you implement these methods
 More examples can be found [here](https://github.com/philskillz-coder/discord-py-paginator/tree/main/examples) (currently no examples, i will add some)
 
 ## Config
-You can configure your paginator subclass and instance via a config dict.
-An example with config can be found in the examples folder
+You can configure your paginator subclass by setting the following class attributes:
+An example with config can be found in the examples folder (not yet)
 
-### All config options
 
 | **CONFIG NAME**                      | **TYPE**        | **VALUES**          | **EXPLANATION**                                                            | **INFO**                                             
 |--------------------------------------|-----------------|---------------------|----------------------------------------------------------------------------|------------------------------------------------------|
 | ``paginator_delete_when_finished``   | ``bool``        | ``True``, ``False`` | _Delete the pagination message when stopped_                               | Only works if the paginator message is not ephemeral |
 | ``paginator_delete_delay``           | ``int``         | Any                 | _How long to wait after paginator stop to delete the message_              |                                                      |
+| ``paginator_view_timeout``           | ``int``         | Any                 | _The view timeout_                                                         |                                                      |
 |                                      |                 |                     |                                                                            |                                                      |
-| ``start_button_enabled``             |                 |                     |                                                                            | **Option not changable**                             |
 | ``start_button_style``               | ``ButtonStyle`` | Any                 | _The style of the start button_                                            |                                                      |
 | ``start_button_label``               | ``str``         | Any                 | _The label of the start button_                                            |                                                      |
 | ``start_button_emoji``               | ``str``         | Any                 | _The emoji of the start button_                                            |                                                      |
 |                                      |                 |                     |                                                                            |                                                      |
-| ``stop_button_enabled``              |                 |                     |                                                                            | **Option not changable**                             |
 | ``stop_button_style``                | ``ButtonStyle`` | Any                 | _The style of the stop button_                                             |                                                      |
 | ``stop_button_label``                | ``str``         | Any                 | _The label of the stop button_                                             |                                                      |
 | ``stop_button_emoji``                | ``str``         | Any                 | _The emoji of the stop button_                                             |                                                      |
@@ -109,8 +107,6 @@ An example with config can be found in the examples folder
 | ``quick_navigation_button_label``    | ``str``         | Any                 | _The label of the quick navigation button_                                 |                                                      |
 | ``quick_navigation_button_emoji``    | ``str``         | Any                 | _The emoji of the quick navigation button_                                 |                                                      |
 | ``quick_navigation_error_message``   | ``str``         | Any                 | _The message when quick navigation input is not a number_                  |                                                      |
-| ``quick_navigation_error_ephemeral`` | ``bool``        | ``True``, ``False`` | _Whether the error message should be ephemeral or not_                     |                                                      |
-|                                      |                 |                     |                                                                            |                                                      |
 |                                      |                 |                     |                                                                            |                                                      |
 | ``first_element_button_enabled``     | ``bool``        | ``True``, ``False`` | _Whether the button to go to the first element should be enabled or not    |                                                      |
 | ``first_element_button_style``       | ``ButtonStyle`` | Any                 | _The style of the first element button_                                    |                                                      |
