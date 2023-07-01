@@ -83,7 +83,7 @@ additionally you implement these methods
 
 <br>
 
-More examples can be found [here](https://github.com/philskillz-coder/discord-py-paginator/tree/main/examples) (currently no examples, i will add some)
+More examples can be found [here](https://github.com/philskillz-coder/discord-py-paginator/tree/main/examples)
 
 ## Config
 You can configure your paginator subclass by setting the following class attributes:
