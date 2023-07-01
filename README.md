@@ -18,7 +18,7 @@ You can report one via
 thanks in advance.
 
 # Install
-This library works with [discord.py](https://github.com/Rapptz/discord.py) v2.1.0a:
+This library is tested with [discord.py](https://github.com/Rapptz/discord.py) v2.3.1:
 
 ```sh
 pip install git+https://github.com/philskillz-coder/discord-py-paginator
@@ -37,6 +37,8 @@ Step by step:<br/>
 ## An example paginator class:
 
 `````python
+from discord.ext.paginator import paginator
+
 class GuildPaginator(paginator.Paginator):
     async def get_page_count(self, interaction: Interaction) -> int:
         return len(self.client.guilds)
