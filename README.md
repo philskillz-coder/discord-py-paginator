@@ -1,5 +1,5 @@
 # discord-py-paginator
-[![wakatime](https://wakatime.com/badge/github/philskillz-coder/discord-py-paginator.svg)](https://wakatime.com/badge/github/philskillz-coder/discord-py-paginator)
+[![wakatime](https://wakatime.com/badge/github/philskillz-coder/discord-py-paginator.svg)](https://wakatime.com/badge/github/philskillz-coder/discord-py-paginator) <br>
 A view paginator for [discord.py](https://github.com/Rapptz/discord.py)</br></br>
 This paginator is your best choice  if you want to display</br>
 - large amounts of data (image gallery)
