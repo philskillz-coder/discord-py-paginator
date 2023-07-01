@@ -22,23 +22,47 @@ class QuickNav(ui.Modal, title="Quick Navigation"):
         super().__init__(title=title, timeout=timeout, custom_id=custom_id)
         self.parent = parent
         self.user = user
+        self.interaction_check = self.parent.interaction_check
 
     page = ui.TextInput(label='Page')
 
-    async def interaction_check(self, interaction: Interaction) -> bool:
-        if interaction.user != self.user:
-            await interaction.response.send_message(
-                content="You are not allowed to do this",
-                ephemeral=True
-            )
-            raise ValueError("You are not allowed to do this!")  # add better error message
-
-        return True
-
     async def on_submit(self, interaction: Interaction):
         if not str(self.page).isdigit():
-            await interaction.response.send_message(f"`{self.page}` is not a number!")
-            raise ValueError("Not a number")  # add better error message
+            await interaction.response.send_message(
+                self.parent.quick_navigation_error_message % self.page.value,
+                ephemeral=True
+            )
+            raise ValueError("Not a number")
 
         await self.parent.child_update_page_number(interaction, int(str(self.page)) - 1)
+        await self.parent.child_update_page_content(interaction)
+
+
+class Search(ui.Modal, title="Search"):
+    def __init__(
+            self,
+            *,
+            parent: Paginator,
+            user: User,
+            title: str = MISSING,
+            timeout: Optional[float] = None,
+            custom_id: str = MISSING
+    ) -> None:
+        super().__init__(title=title, timeout=timeout, custom_id=custom_id)
+        self.parent = parent
+        self.user = user
+        self.interaction_check = self.parent.interaction_check
+
+    query = ui.TextInput(label='Query')
+
+    async def on_submit(self, interaction: Interaction):
+        page_number = await self.parent.search_page(interaction, query=self.query.value)
+        if page_number is None:
+            await interaction.response.send_message(
+                self.parent.search_button_error_message % self.query.value,
+                ephemeral=True
+            )
+            return
+
+        await self.parent.child_update_page_number(interaction, page_number)
         await self.parent.child_update_page_content(interaction)
