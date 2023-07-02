@@ -3,6 +3,7 @@ from typing import Optional, Literal
 import discord
 from discord.ext import commands
 from discord.ext.paginator import Paginator
+from discord import ui
 
 i = discord.Intents.default()
 i.message_content = True
@@ -63,7 +64,7 @@ class MemberPaginator(Paginator):
     async def on_start(self, interaction: discord.Interaction):
         # This is called when the paginator is started
         # If you need a database connection, you should set it up here.
-
+        self.extra.disabled = False
         print("Start")
 
     async def on_stop(self, interaction: discord.Interaction):
@@ -71,6 +72,18 @@ class MemberPaginator(Paginator):
         # If you needed a database connection, you should close it here.
 
         print("Stop")
+
+    @ui.button(
+        label="Extra",
+        disabled=True,
+        style=discord.ButtonStyle.red,
+        row=3
+    )
+    async def extra(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_message(
+            content="Extra!",
+            ephemeral=True
+        )
 
 
 @bot.command()
