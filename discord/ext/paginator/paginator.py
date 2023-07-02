@@ -1,7 +1,7 @@
 from typing import Dict, Any, Union, Callable, Coroutine, Optional
 
 from discord import ui, User, Interaction, ButtonStyle, Emoji, PartialEmoji
-from discord.ui import Item
+
 from . import modals
 
 GCP_TYPE = Callable[[Interaction, int], Coroutine[Any, Any, Dict[str, Any]]]
@@ -299,7 +299,9 @@ class Paginator(ui.View):
 
     # noinspection PyArgumentList
     async def child_paginator_start(self, interaction: Interaction):
-        self.clear_items()
+        for item in self.children:
+            if isinstance(item, PaginatorButton):
+                self.remove_item(item)
 
         self.first_elem_btn.disabled = False
         self.prev_elem_btn.disabled = False
