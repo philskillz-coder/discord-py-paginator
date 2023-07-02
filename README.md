@@ -18,6 +18,21 @@ You can report one via
 
 thanks in advance.
 
+# Changelog
+<details>
+  <summary>Click me</summary>
+  
+   ````
+   # v2.1.0 -> v2.1.1:
+   - Added feature for custom buttons
+   
+   # v2.0.6 -> v2.1.0:
+   - Added feature for search button
+   - Rewrite of the paginator class
+   - Added more examples
+   ````
+</details>
+
 # Install
 This library is tested with [discord.py](https://github.com/Rapptz/discord.py) v2.3.1:
 
