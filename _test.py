@@ -64,7 +64,7 @@ class MemberPaginator(Paginator):
     async def on_start(self, interaction: discord.Interaction):
         # This is called when the paginator is started
         # If you need a database connection, you should set it up here.
-        self.extra.disabled = False
+        self.kick_member.disabled = False
         print("Start")
 
     async def on_stop(self, interaction: discord.Interaction):
@@ -74,14 +74,16 @@ class MemberPaginator(Paginator):
         print("Stop")
 
     @ui.button(
-        label="Extra",
+        label="Kick",
         disabled=True,
         style=discord.ButtonStyle.red,
         row=3
     )
-    async def extra(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def kick_member(self, interaction: discord.Interaction, button: discord.ui.Button):
+        member = interaction.guild.members[self.page]
+        await member.kick()
         await interaction.response.send_message(
-            content="Extra!",
+            content="Kicked!",
             ephemeral=True
         )
 
