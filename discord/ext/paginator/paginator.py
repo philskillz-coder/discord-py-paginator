@@ -118,7 +118,7 @@ class Paginator(ui.View):
     page_number_button_label: str = "%s/%s"
     page_number_button_emoji: str = None
 
-    search_button_enabled: bool = True
+    search_button_enabled: bool = False
     search_button_style: ButtonStyle = ButtonStyle.secondary
     search_button_label: str = "\U0001f50d"
     search_button_emoji: str = None
@@ -381,3 +381,22 @@ class Paginator(ui.View):
 
     async def search_page(self, interaction: Interaction, query: str) -> Optional[int]:
         return None
+
+class InfinitePaginator(Paginator):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    async def child_update_page_number(self, interaction: Interaction, page: int):
+        self.page = page
+
+    async def child_update_page_content(self, interaction: Interaction):
+        self.page_number_btn.label = self.page_number_button_label % (str(self.page + 1), "∞")
+        await self.page_update(interaction, self.page)
+
+    async def get_page_count(self, interaction: Interaction) -> None:
+        return None
+
+
+
+
+
