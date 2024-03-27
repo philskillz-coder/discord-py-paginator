@@ -1,1 +1,1 @@
-from .paginator import Paginator, InfinitePaginator
+from .paginator import Paginator
