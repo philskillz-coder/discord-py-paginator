@@ -106,12 +106,15 @@ More examples can be found [here](https://github.com/philskillz-coder/discord-py
   <summary>Click me</summary>
   
    ````
-    # v2.1.2 -> v2.1.3:
-    - Added new config option _button_hidden
-    - Merged InfinitePaginator into Paginator (Paginator is now infinite by default)
+   # v2.1.3 -> v2.1.4:
+   - Added kwargs to the Paginator class (passed to view)
+   
+   # v2.1.2 -> v2.1.3:
+   - Added new config option _button_hidden
+   - Merged InfinitePaginator into Paginator (Paginator is now infinite by default)
     
-    # v2.1.1 -> v2.1.2:
-    - Added InfinitePaginator
+   # v2.1.1 -> v2.1.2:
+   - Added InfinitePaginator
     
    # v2.1.0 -> v2.1.1:
    - Added feature for custom buttons

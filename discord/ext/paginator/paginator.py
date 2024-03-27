@@ -157,9 +157,12 @@ class Paginator(ui.View):
 
     def __init__(
             self,
-            user: User
+            user: User,
+            **kwargs
     ):
-        super().__init__(timeout=self.paginator_view_timeout)
+        _kwargs = dict(timeout=self.paginator_view_timeout)
+        _kwargs.update(kwargs)
+        super().__init__(**_kwargs)
 
         self.user = user
         self.page = 0
@@ -390,4 +393,3 @@ class Paginator(ui.View):
 
     async def search_page(self, interaction: Interaction, query: str) -> Optional[int]:
         return None
-
