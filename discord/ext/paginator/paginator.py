@@ -31,28 +31,46 @@ class PaginatorButton(ui.Button):
 
 class FirstElementButton(PaginatorButton):
     async def callback(self, interaction: Interaction) -> Any:
-        await self.parent.child_update_page_number(interaction, 0)
+        if not await self.parent.child_update_page_number(interaction, 0):
+            await interaction.response.send_message(
+                self.parent.search_button_error_message % "0",
+                ephemeral=True
+            )
+            return
         await self.parent.child_update_page_content(interaction)
 
 
 class PreviousElementButton(PaginatorButton):
     async def callback(self, interaction: Interaction) -> Any:
-        await self.parent.child_update_page_number(interaction, self.parent.page - 1)
+        if not await self.parent.child_update_page_number(interaction, self.parent.page-1):
+            await interaction.response.send_message(
+                self.parent.search_button_error_message % f"{self.parent.page-1}",
+                ephemeral=True
+            )
+            return
         await self.parent.child_update_page_content(interaction)
 
 
 class NextElementButton(PaginatorButton):
     async def callback(self, interaction: Interaction) -> Any:
-        await self.parent.child_update_page_number(interaction, self.parent.page + 1)
+        if not await self.parent.child_update_page_number(interaction, self.parent.page + 1):
+            await interaction.response.send_message(
+                self.parent.search_button_error_message % f"{self.parent.page + 1}",
+                ephemeral=True
+            )
+            return
         await self.parent.child_update_page_content(interaction)
 
 
 class LastElementButton(PaginatorButton):
     async def callback(self, interaction: Interaction) -> Any:
-        await self.parent.child_update_page_number(
-            interaction,
-            (await self.parent.get_page_count(interaction) or self.parent.page + 1) - 1
-        )
+        new_page = (await self.parent.get_page_count(interaction) or self.parent.page + 1) - 1
+        if not await self.parent.child_update_page_number(interaction, new_page):
+            await interaction.response.send_message(
+                self.parent.search_button_error_message % f"{new_page}",
+                ephemeral=True
+            )
+            return
         await self.parent.child_update_page_content(interaction)
 
 
@@ -68,7 +86,12 @@ class StopButton(PaginatorButton):
 class StartButton(PaginatorButton):
     async def callback(self, interaction: Interaction) -> Any:
         await self.parent.child_paginator_start(interaction)
-        await self.parent.child_update_page_number(interaction, 0)
+        if not await self.parent.child_update_page_number(interaction, 0):
+            await interaction.response.send_message(
+                self.parent.search_button_error_message % f"0",
+                ephemeral=True
+            )
+            return
         await self.parent.child_update_page_content(interaction)
 
 
@@ -93,6 +116,7 @@ class SearchButton(PaginatorButton):
         await interaction.response.send_modal(modals.Search(parent=self.parent, user=self.parent.user))
 
 
+# todo: disable skip to start/end button when infinite pages
 class Paginator(ui.View):
     paginator_view_timeout: int = 180
     paginator_delete_when_finished: bool = True  # only works when paginator is not ephemeral
@@ -374,12 +398,20 @@ class Paginator(ui.View):
         await self.on_stop(interaction)
         super().stop()
 
-    async def child_update_page_number(self, interaction: Interaction, page: int):
+    async def page_validator(self, interaction: Interaction, page: int, max_page: Optional[int]) -> bool:
+        return True
+
+    async def child_update_page_number(self, interaction: Interaction, page: int) -> bool:
         _page_count = await self.get_page_count(interaction)
+        if not await self.page_validator(interaction, page, _page_count):
+            return False
+
         if _page_count is not None:
             self.page = (page % _page_count)
         else:
             self.page = page
+
+        return True
 
     async def child_update_page_content(self, interaction: Interaction):
         self.page_number_btn.label = self.page_number_button_label % (str(self.page + 1), str(await self.get_page_count(interaction) or "∞"))

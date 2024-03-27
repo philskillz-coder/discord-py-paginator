@@ -106,6 +106,9 @@ More examples can be found [here](https://github.com/philskillz-coder/discord-py
   <summary>Click me</summary>
   
    ````
+   # v2.1.4 -> v2.1.5:
+   - Added page_validator method
+   
    # v2.1.3 -> v2.1.4:
    - Added kwargs to the Paginator class (passed to view)
    

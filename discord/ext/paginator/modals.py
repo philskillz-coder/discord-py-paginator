@@ -27,14 +27,13 @@ class QuickNav(ui.Modal, title="Quick Navigation"):
     page = ui.TextInput(label='Page')
 
     async def on_submit(self, interaction: Interaction):
-        if not str(self.page).isdigit():
+        if not str(self.page).isdigit() or not await self.parent.child_update_page_number(interaction, int(str(self.page)) - 1):
             await interaction.response.send_message(
                 self.parent.quick_navigation_error_message % self.page.value,
                 ephemeral=True
             )
             raise ValueError("Not a number")
 
-        await self.parent.child_update_page_number(interaction, int(str(self.page)) - 1)
         await self.parent.child_update_page_content(interaction)
 
 
@@ -57,12 +56,11 @@ class Search(ui.Modal, title="Search"):
 
     async def on_submit(self, interaction: Interaction):
         page_number = await self.parent.search_page(interaction, query=self.query.value)
-        if page_number is None:
+        if page_number is None or not await self.parent.child_update_page_number(interaction, page_number):
             await interaction.response.send_message(
                 self.parent.search_button_error_message % self.query.value,
                 ephemeral=True
             )
             return
 
-        await self.parent.child_update_page_number(interaction, page_number)
         await self.parent.child_update_page_content(interaction)
