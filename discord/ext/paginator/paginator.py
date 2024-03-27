@@ -107,44 +107,50 @@ class Paginator(ui.View):
     stop_button_label: str = "Quit"
     stop_button_emoji: str = None
 
-    quick_navigation_button_enabled: bool = True
+    quick_navigation_button_hidden: bool = False
+    quick_navigation_button_enabled: bool = False
     quick_navigation_button_style: ButtonStyle = ButtonStyle.blurple
     quick_navigation_button_label: str = "Nav"
     quick_navigation_button_emoji: str = None
     quick_navigation_error_message: str = "%s is not a number!"
 
-    page_number_button_enabled: bool = True
+    page_number_button_hidden: bool = False
     page_number_button_style: ButtonStyle = ButtonStyle.secondary
     page_number_button_label: str = "%s/%s"
     page_number_button_emoji: str = None
 
+    search_button_hidden: bool = False
     search_button_enabled: bool = False
     search_button_style: ButtonStyle = ButtonStyle.secondary
     search_button_label: str = "\U0001f50d"
     search_button_emoji: str = None
     search_button_error_message: str = "No results found for '%s!'"
 
+    first_element_button_hidden: bool = False
     first_element_button_enabled: bool = True
     first_element_button_style: ButtonStyle = ButtonStyle.secondary
     first_element_button_label: str = "\U000025c0 \U000025c0"  # None means no label
     first_element_button_emoji: str = None
 
+    prev_element_button_hidden: bool = False
     prev_element_button_enabled: bool = True
     prev_element_button_style: ButtonStyle = ButtonStyle.secondary
     prev_element_button_label: str = "\U000025c0"
     prev_element_button_emoji: str = None
 
+    next_element_button_hidden: bool = False
     next_element_button_enabled: bool = True
     next_element_button_style: ButtonStyle = ButtonStyle.secondary
     next_element_button_label: str = "\U000025b6"
     next_element_button_emoji: str = None
 
+    last_element_button_hidden: bool = False
     last_element_button_enabled: bool = True
     last_element_button_style: ButtonStyle = ButtonStyle.secondary
     last_element_button_label: str = "\U000025b6 \U000025b6"
     last_element_button_emoji: str = None
 
-    placeholder_button_enabled: bool = True
+    placeholder_button_hidden: bool = False
     placeholder_button_style: ButtonStyle = ButtonStyle.secondary
     placeholder_button_label: str = "\U0001f6ab"
     placeholder_button_emoji: str = None
@@ -266,35 +272,35 @@ class Paginator(ui.View):
         )
 
         # first element, previous element
-        if self.first_element_button_enabled:
+        if not self.first_element_button_hidden:
             self.add_item(self.first_elem_btn)
-        if self.prev_element_button_enabled:
+        if not self.prev_element_button_hidden:
             self.add_item(self.prev_elem_btn)
 
         self.add_item(self.start_btn)
 
         # next element, last element
-        if self.next_element_button_enabled:
+        if not self.next_element_button_hidden:
             self.add_item(self.next_elem_btn)
-        if self.last_element_button_enabled:
+        if not self.last_element_button_hidden:
             self.add_item(self.last_elem_btn)
 
         # placeholders
-        if self.placeholder_button_enabled:
+        if not self.placeholder_button_hidden:
             self.add_item(PlaceholderButton(self, **placeholder_config))
 
         # quick navigation
-        if self.quick_navigation_button_enabled:
+        if not self.quick_navigation_button_hidden:
             self.add_item(self.quick_nav_btn)
 
         self.add_item(self.stop_btn)
 
         # search button
-        if self.search_button_enabled:
+        if not self.search_button_hidden:
             self.add_item(self.search_btn)
 
         # placeholders
-        if self.placeholder_button_enabled:
+        if not self.placeholder_button_hidden:
             self.add_item(PlaceholderButton(self, **placeholder_config))
 
     # noinspection PyArgumentList
@@ -303,12 +309,12 @@ class Paginator(ui.View):
             if isinstance(item, PaginatorButton):
                 self.remove_item(item)
 
-        self.first_elem_btn.disabled = False
-        self.prev_elem_btn.disabled = False
-        self.next_elem_btn.disabled = False
-        self.last_elem_btn.disabled = False
-        self.quick_nav_btn.disabled = False
-        self.search_btn.disabled = False
+        self.first_elem_btn.disabled = not self.first_element_button_enabled
+        self.prev_elem_btn.disabled = not self.prev_element_button_enabled
+        self.next_elem_btn.disabled = not self.next_element_button_enabled
+        self.last_elem_btn.disabled = not self.last_element_button_enabled
+        self.quick_nav_btn.disabled = not self.quick_navigation_button_enabled
+        self.search_btn.disabled = not self.search_button_enabled
 
         placeholder_config = dict(
             style=self.placeholder_button_style,
@@ -318,37 +324,37 @@ class Paginator(ui.View):
         )
 
         # first element, previous element
-        if self.first_element_button_enabled:
+        if not self.first_element_button_hidden:
             self.add_item(self.first_elem_btn)
-        if self.prev_element_button_enabled:
+        if not self.prev_element_button_hidden:
             self.add_item(self.prev_elem_btn)
 
         # page number
-        if self.page_number_button_enabled:
+        if not self.page_number_button_hidden:
             self.add_item(self.page_number_btn)
 
         # next element, last element
-        if self.next_element_button_enabled:
+        if not self.next_element_button_hidden:
             self.add_item(self.next_elem_btn)
-        if self.last_element_button_enabled:
+        if not self.last_element_button_hidden:
             self.add_item(self.last_elem_btn)
 
         # placeholders
-        if self.placeholder_button_enabled:
+        if not self.placeholder_button_hidden:
             self.add_item(PlaceholderButton(self, **placeholder_config))
 
         # quick navigation
-        if self.quick_navigation_button_enabled:
+        if not self.quick_navigation_button_hidden:
             self.add_item(self.quick_nav_btn)
 
         self.add_item(self.stop_btn)
 
         # search button
-        if self.search_button_enabled:
+        if not self.search_button_hidden:
             self.add_item(self.search_btn)
 
         # placeholders
-        if self.placeholder_button_enabled:
+        if not self.placeholder_button_hidden:
             self.add_item(PlaceholderButton(self, **placeholder_config))
 
         await self.on_start(interaction)
@@ -367,36 +373,21 @@ class Paginator(ui.View):
 
     async def child_update_page_number(self, interaction: Interaction, page: int):
         _page_count = await self.get_page_count(interaction)
-        self.page = (page % _page_count)
+        if _page_count is not None:
+            self.page = (page % _page_count)
+        else:
+            self.page = page
 
     async def child_update_page_content(self, interaction: Interaction):
-        self.page_number_btn.label = self.page_number_button_label % (str(self.page + 1), str(await self.get_page_count(interaction)))
+        self.page_number_btn.label = self.page_number_button_label % (str(self.page + 1), str(await self.get_page_count(interaction) or "∞"))
         await self.page_update(interaction, self.page)
 
-    async def get_page_count(self, interaction: Interaction) -> int:
-        raise NotImplementedError("get_page_count must be implemented!")
+    async def get_page_count(self, interaction: Interaction) -> Optional[int]:
+        return None
 
     async def page_update(self, interaction: Interaction, current_page: int):
         raise NotImplementedError("page_update must be implemented!")
 
     async def search_page(self, interaction: Interaction, query: str) -> Optional[int]:
         return None
-
-class InfinitePaginator(Paginator):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    async def child_update_page_number(self, interaction: Interaction, page: int):
-        self.page = page
-
-    async def child_update_page_content(self, interaction: Interaction):
-        self.page_number_btn.label = self.page_number_button_label % (str(self.page + 1), "∞")
-        await self.page_update(interaction, self.page)
-
-    async def get_page_count(self, interaction: Interaction) -> None:
-        return None
-
-
-
-
 
