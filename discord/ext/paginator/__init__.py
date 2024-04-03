@@ -1,1 +1,1 @@
-from .paginator import Paginator
+from .paginator import Paginator, InstantPaginator

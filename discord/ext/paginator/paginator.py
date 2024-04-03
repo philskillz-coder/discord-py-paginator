@@ -401,6 +401,13 @@ class Paginator(ui.View):
     async def page_validator(self, interaction: Interaction, page: int, max_page: Optional[int]) -> bool:
         return True
 
+    async def refresh_page(self, interaction: Interaction):
+        if not await self.child_update_page_number(interaction, self.page):
+            await interaction.response.send_message(
+                self.search_button_error_message % str(self.page),
+            )
+        await self.child_update_page_content(interaction)
+
     async def child_update_page_number(self, interaction: Interaction, page: int) -> bool:
         _page_count = await self.get_page_count(interaction)
         if not await self.page_validator(interaction, page, _page_count):
@@ -425,3 +432,17 @@ class Paginator(ui.View):
 
     async def search_page(self, interaction: Interaction, query: str) -> Optional[int]:
         return None
+
+class InstantPaginator(Paginator):
+    @staticmethod
+    async def edit_or_send(interaction: Interaction, **kwargs):
+        if interaction.message is not None:
+            await interaction.response.edit_message(**kwargs)
+        else:
+            await interaction.response.send_message(**kwargs)
+
+    async def run(self, interaction: Interaction, *args, **kwargs):
+        await super().run(*args, **kwargs)
+        await self.child_paginator_start(interaction)
+        await self.child_update_page_number(interaction, 0)
+        await self.child_update_page_content(interaction)

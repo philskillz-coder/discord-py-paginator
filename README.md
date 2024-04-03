@@ -106,6 +106,10 @@ More examples can be found [here](https://github.com/philskillz-coder/discord-py
   <summary>Click me</summary>
   
    ````
+   # v2.1.5 -> v2.1.6:
+   - Added InstantPaginator (without start button)
+   - Added more examples
+   
    # v2.1.4 -> v2.1.5:
    - Added page_validator method
    
@@ -118,14 +122,6 @@ More examples can be found [here](https://github.com/philskillz-coder/discord-py
     
    # v2.1.1 -> v2.1.2:
    - Added InfinitePaginator
-    
-   # v2.1.0 -> v2.1.1:
-   - Added feature for custom buttons
-   
-   # v2.0.6 -> v2.1.0:
-   - Added feature for search button
-   - Rewrite of the paginator class
-   - Added more examples
    ````
 </details>
 
