@@ -81,7 +81,7 @@ class GuildPaginator(paginator.Paginator):
     name="guilds",
     description="Show all the guilds"
 )
-async def show_guilds(ctx: commands.Context):
+async def show_guilds(ctx):
     await ctx.send(
         content="The bot guilds",
         view=await GuildPaginator(
