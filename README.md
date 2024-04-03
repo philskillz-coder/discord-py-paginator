@@ -47,7 +47,7 @@ Step by step:<br/>
    - In this method you can use the interaction object as in your commands.
 3. Create the ``Paginator.get_page_count`` method (or set the ``static_page_count`` variable):</br>
    - In this method you get the interaction object passed.
-   - Returns, how many pages you have. (~~If you have 'infinite' pages you can return ``None``~~ not possible yet)
+   - Returns, how many pages you have. If you no page limit, return ``None`` or dont implement this method.
 
 
 ## Example
@@ -93,13 +93,15 @@ async def show_guilds(ctx: commands.Context):
 <br>
 
 additionally you implement these methods
+- ``Paginator.page_validator`` (custom page number validator)
+- ``Paginator.search_page`` (search for the first occurrence of a value on a page)
 - ``Paginator.on_setup`` (invoked when the paginator instance is created)
 - ``Paginator.on_start`` (invoked when a user clicked the start button)
 - ``Paginator.on_stop`` (invoked when a user clicked the stop button)
 
 <br>
 
-More examples can be found [here](https://github.com/philskillz-coder/discord-py-paginator/tree/main/examples)
+Examples on all methods and features can be found in the [examples folder](./examples)
 
 ## Changelog
 <details>
@@ -129,12 +131,12 @@ More examples can be found [here](https://github.com/philskillz-coder/discord-py
 Issue reports are appreciated.
 You can report one via
 - the repositories [issues page](https://github.com/philskillz-coder/discord-py-paginator/issues)
-- [Mail](mailto:github@theskz.dev?subject=Issue%20report%20for%20discord-py-paginator&body=Repository%20link%3A%0D%0Ahttps%3A%2F%2Fgithub.com%2Fphilskillz-coder%2Fdiscord-py-paginator)
-- my [Discord Server](https://discord.gg/QjntPW9fHc)
+- [Mail](mailto:philipp.nikos@gmail.com?subject=Issue%20report%20for%20discord-py-paginator&body=Repository%20link%3A%0D%0Ahttps%3A%2F%2Fgithub.com%2Fphilskillz-coder%2Fdiscord-py-paginator)
+- my [Discord Server](https://discord.gg/APGDCfZbpW)
 - Discord direct message to `philskillz_`
 
 thanks in advance.
 
 ## Config
 All config options can be found in [config.md file](config.md)<br>
-Examples can be found in [examples folder](examples)
+Examples can be found in [examples folder](./examples)
