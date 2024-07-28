@@ -442,7 +442,7 @@ class InstantPaginator(Paginator):
             await interaction.response.send_message(**kwargs)
 
     async def run(self, interaction: Interaction, *args, **kwargs):
-        await super().run(*args, **kwargs)
+        await super().run(*args, **kwargs, interaction=interaction)
         await self.child_paginator_start(interaction)
         await self.child_update_page_number(interaction, 0)
         await self.child_update_page_content(interaction)
