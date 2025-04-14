@@ -118,6 +118,15 @@ class SearchButton(PaginatorButton):
 
 # todo: disable skip to start/end button when infinite pages
 class Paginator(ui.View):
+    @staticmethod
+    async def edit_or_send(interaction: "Interaction", **kwargs):
+        if interaction.is_expired() and interaction.message:
+            await interaction.message.edit(**kwargs)
+        elif interaction.response.is_done():
+            await interaction.edit_original_response(**kwargs)
+        else:
+            await interaction.response.edit_message(**kwargs)
+
     paginator_view_timeout: int = 180
     paginator_delete_when_finished: bool = True  # only works when paginator is not ephemeral
     paginator_delete_delay: int = 10
@@ -434,13 +443,6 @@ class Paginator(ui.View):
         return None
 
 class InstantPaginator(Paginator):
-    @staticmethod
-    async def edit_or_send(interaction: Interaction, **kwargs):
-        if interaction.message is not None:
-            await interaction.response.edit_message(**kwargs)
-        else:
-            await interaction.response.send_message(**kwargs)
-
     async def run(self, interaction: Interaction, *args, **kwargs):
         await super().run(*args, **kwargs, interaction=interaction)
         await self.child_paginator_start(interaction)
